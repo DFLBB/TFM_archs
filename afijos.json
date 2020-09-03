@@ -1,51 +1,51 @@
-[{"ObjectType":"AFIJOS","IDAfijo":1,"Nombre":"GLIMES DE BRABANT","FechaAlta":"2003-08-18","FechaBaja":""}
-,{"ObjectType":"AFIJOS","IDAfijo":2,"Nombre":"CORAMONTE","FechaAlta":"2003-07-22","FechaBaja":""}
-,{"ObjectType":"AFIJOS","IDAfijo":3,"Nombre":"LAS CIRAJAS","FechaAlta":"2002-11-17","FechaBaja":""}
-,{"ObjectType":"AFIJOS","IDAfijo":4,"Nombre":"VILLA ROCALLA ","FechaAlta":"2003-05-14","FechaBaja":""}
-,{"ObjectType":"AFIJOS","IDAfijo":5,"Nombre":"VILLA ALKOR","FechaAlta":"2003-06-17","FechaBaja":""}
-,{"ObjectType":"AFIJOS","IDAfijo":6,"Nombre":"OZMILION ","FechaAlta":"1994-02-18","FechaBaja":""}
-,{"ObjectType":"AFIJOS","IDAfijo":7,"Nombre":"CUMBA","FechaAlta":"1995-04-21","FechaBaja":""}
-,{"ObjectType":"AFIJOS","IDAfijo":8,"Nombre":"LA VIRREYNA","FechaAlta":"2000-11-10","FechaBaja":""}
-,{"ObjectType":"AFIJOS","IDAfijo":9,"Nombre":"WAYKEMOLA","FechaAlta":"1997-10-08","FechaBaja":""}
-,{"ObjectType":"AFIJOS","IDAfijo":10,"Nombre":"KRYSTLE´S LINE","FechaAlta":"2020-05-24","FechaBaja":""}
-,{"ObjectType":"AFIJOS","IDAfijo":11,"Nombre":"PARQUE DEL RETIRO","FechaAlta":"2005-11-25","FechaBaja":""}
-,{"ObjectType":"AFIJOS","IDAfijo":12,"Nombre":"EL VALLE ENCANTADO","FechaAlta":"2002-06-14","FechaBaja":""}
-,{"ObjectType":"AFIJOS","IDAfijo":13,"Nombre":"PORTITXOL","FechaAlta":"2001-04-19","FechaBaja":""}
-,{"ObjectType":"AFIJOS","IDAfijo":14,"Nombre":"SEIKYTAS","FechaAlta":"2005-11-21","FechaBaja":""}
-,{"ObjectType":"AFIJOS","IDAfijo":15,"Nombre":"MARVELS LUX","FechaAlta":"2004-12-06","FechaBaja":""}
-,{"ObjectType":"AFIJOS","IDAfijo":16,"Nombre":"SHIKARAH","FechaAlta":"2013-09-26","FechaBaja":""}
-,{"ObjectType":"AFIJOS","IDAfijo":17,"Nombre":"GOLDEN ROSE MANOR","FechaAlta":"2005-11-17","FechaBaja":""}
-,{"ObjectType":"AFIJOS","IDAfijo":18,"Nombre":"SHERAZADE","FechaAlta":"1994-12-08","FechaBaja":""}
-,{"ObjectType":"AFIJOS","IDAfijo":19,"Nombre":"VEGA DE LA MARTINA","FechaAlta":"2018-07-21","FechaBaja":""}
-,{"ObjectType":"AFIJOS","IDAfijo":20,"Nombre":"DIAMOND DE VALLMASERI","FechaAlta":"2005-03-12","FechaBaja":""}
-,{"ObjectType":"AFIJOS","IDAfijo":21,"Nombre":"TRASTUCA","FechaAlta":"2004-06-08","FechaBaja":""}
-,{"ObjectType":"AFIJOS","IDAfijo":22,"Nombre":"MINATERRA","FechaAlta":"2013-05-10","FechaBaja":""}
-,{"ObjectType":"AFIJOS","IDAfijo":23,"Nombre":"EL LAGO ANDARA","FechaAlta":"2005-06-17","FechaBaja":""}
-,{"ObjectType":"AFIJOS","IDAfijo":24,"Nombre":"LAS MERINDADES","FechaAlta":"1993-12-26","FechaBaja":""}
-,{"ObjectType":"AFIJOS","IDAfijo":25,"Nombre":"SILVER POISE","FechaAlta":"2015-01-20","FechaBaja":""}
-,{"ObjectType":"AFIJOS","IDAfijo":26,"Nombre":"VEGA DE LA MARTINA","FechaAlta":"2017-12-06","FechaBaja":""}
-,{"ObjectType":"AFIJOS","IDAfijo":27,"Nombre":"ALTAGIS","FechaAlta":"1996-06-28","FechaBaja":""}
-,{"ObjectType":"AFIJOS","IDAfijo":28,"Nombre":"GUARDIANES DEL SILENCIO","FechaAlta":"2017-07-16","FechaBaja":""}
-,{"ObjectType":"AFIJOS","IDAfijo":29,"Nombre":"SONTAY","FechaAlta":"1995-06-20","FechaBaja":""}
-,{"ObjectType":"AFIJOS","IDAfijo":30,"Nombre":"VALESTORY","FechaAlta":"2013-08-07","FechaBaja":""}
-,{"ObjectType":"AFIJOS","IDAfijo":31,"Nombre":"ANXOS","FechaAlta":"2006-03-19","FechaBaja":""}
-,{"ObjectType":"AFIJOS","IDAfijo":32,"Nombre":"ORUMNILAI","FechaAlta":"1997-01-06","FechaBaja":""}
-,{"ObjectType":"AFIJOS","IDAfijo":33,"Nombre":"YORSHICAN","FechaAlta":"2000-07-28","FechaBaja":""}
-,{"ObjectType":"AFIJOS","IDAfijo":34,"Nombre":"DU MAS DE NAÏLYS","FechaAlta":"2018-07-28","FechaBaja":""}
-,{"ObjectType":"AFIJOS","IDAfijo":35,"Nombre":"LA VEGA DE AZAHAR","FechaAlta":"2015-10-01","FechaBaja":""}
-,{"ObjectType":"AFIJOS","IDAfijo":36,"Nombre":"SORIENA","FechaAlta":"2002-05-29","FechaBaja":""}
-,{"ObjectType":"AFIJOS","IDAfijo":37,"Nombre":"EL BOSQUE DE LUGH","FechaAlta":"1998-11-29","FechaBaja":""}
-,{"ObjectType":"AFIJOS","IDAfijo":38,"Nombre":"TARAWAY","FechaAlta":"1994-02-02","FechaBaja":""}
-,{"ObjectType":"AFIJOS","IDAfijo":39,"Nombre":"CHOWS OF THE ISLAND","FechaAlta":"2007-11-06","FechaBaja":""}
-,{"ObjectType":"AFIJOS","IDAfijo":40,"Nombre":"ANNANGELS","FechaAlta":"2008-12-18","FechaBaja":""}
-,{"ObjectType":"AFIJOS","IDAfijo":41,"Nombre":"FORATA","FechaAlta":"2000-08-25","FechaBaja":""}
-,{"ObjectType":"AFIJOS","IDAfijo":42,"Nombre":"DASHLUT","FechaAlta":"2010-06-25","FechaBaja":""}
-,{"ObjectType":"AFIJOS","IDAfijo":43,"Nombre":"ZAFFIRO BLU","FechaAlta":"2002-06-14","FechaBaja":""}
-,{"ObjectType":"AFIJOS","IDAfijo":44,"Nombre":"TIERRA DEL VIENTO","FechaAlta":"2014-12-10","FechaBaja":""}
-,{"ObjectType":"AFIJOS","IDAfijo":45,"Nombre":"DELS PELUTS","FechaAlta":"2019-05-06","FechaBaja":""}
-,{"ObjectType":"AFIJOS","IDAfijo":46,"Nombre":"FUENTE BLANCA","FechaAlta":"2003-11-21","FechaBaja":""}
-,{"ObjectType":"AFIJOS","IDAfijo":47,"Nombre":"MANADA DE MELVIC","FechaAlta":"1995-07-20","FechaBaja":""}
-,{"ObjectType":"AFIJOS","IDAfijo":48,"Nombre":"JUNGLA NEGRA","FechaAlta":"2000-03-14","FechaBaja":""}
-,{"ObjectType":"AFIJOS","IDAfijo":49,"Nombre":"SOTO DE RIOFRIO","FechaAlta":"1993-09-24","FechaBaja":""}
-,{"ObjectType":"AFIJOS","IDAfijo":50,"Nombre":"GARDELCAN","FechaAlta":"2002-03-08","FechaBaja":""}
+[{"docType":"AFIJOS","IDAfijo":1,"Nombre":"GLIMES DE BRABANT","FechaAlta":"2003-08-18","FechaBaja":""}
+,{"docType":"AFIJOS","IDAfijo":2,"Nombre":"CORAMONTE","FechaAlta":"2003-07-22","FechaBaja":""}
+,{"docType":"AFIJOS","IDAfijo":3,"Nombre":"LAS CIRAJAS","FechaAlta":"2002-11-17","FechaBaja":""}
+,{"docType":"AFIJOS","IDAfijo":4,"Nombre":"VILLA ROCALLA ","FechaAlta":"2003-05-14","FechaBaja":""}
+,{"docType":"AFIJOS","IDAfijo":5,"Nombre":"VILLA ALKOR","FechaAlta":"2003-06-17","FechaBaja":""}
+,{"docType":"AFIJOS","IDAfijo":6,"Nombre":"OZMILION ","FechaAlta":"1994-02-18","FechaBaja":""}
+,{"docType":"AFIJOS","IDAfijo":7,"Nombre":"CUMBA","FechaAlta":"1995-04-21","FechaBaja":""}
+,{"docType":"AFIJOS","IDAfijo":8,"Nombre":"LA VIRREYNA","FechaAlta":"2000-11-10","FechaBaja":""}
+,{"docType":"AFIJOS","IDAfijo":9,"Nombre":"WAYKEMOLA","FechaAlta":"1997-10-08","FechaBaja":""}
+,{"docType":"AFIJOS","IDAfijo":10,"Nombre":"KRYSTLE´S LINE","FechaAlta":"2020-05-24","FechaBaja":""}
+,{"docType":"AFIJOS","IDAfijo":11,"Nombre":"PARQUE DEL RETIRO","FechaAlta":"2005-11-25","FechaBaja":""}
+,{"docType":"AFIJOS","IDAfijo":12,"Nombre":"EL VALLE ENCANTADO","FechaAlta":"2002-06-14","FechaBaja":""}
+,{"docType":"AFIJOS","IDAfijo":13,"Nombre":"PORTITXOL","FechaAlta":"2001-04-19","FechaBaja":""}
+,{"docType":"AFIJOS","IDAfijo":14,"Nombre":"SEIKYTAS","FechaAlta":"2005-11-21","FechaBaja":""}
+,{"docType":"AFIJOS","IDAfijo":15,"Nombre":"MARVELS LUX","FechaAlta":"2004-12-06","FechaBaja":""}
+,{"docType":"AFIJOS","IDAfijo":16,"Nombre":"SHIKARAH","FechaAlta":"2013-09-26","FechaBaja":""}
+,{"docType":"AFIJOS","IDAfijo":17,"Nombre":"GOLDEN ROSE MANOR","FechaAlta":"2005-11-17","FechaBaja":""}
+,{"docType":"AFIJOS","IDAfijo":18,"Nombre":"SHERAZADE","FechaAlta":"1994-12-08","FechaBaja":""}
+,{"docType":"AFIJOS","IDAfijo":19,"Nombre":"VEGA DE LA MARTINA","FechaAlta":"2018-07-21","FechaBaja":""}
+,{"docType":"AFIJOS","IDAfijo":20,"Nombre":"DIAMOND DE VALLMASERI","FechaAlta":"2005-03-12","FechaBaja":""}
+,{"docType":"AFIJOS","IDAfijo":21,"Nombre":"TRASTUCA","FechaAlta":"2004-06-08","FechaBaja":""}
+,{"docType":"AFIJOS","IDAfijo":22,"Nombre":"MINATERRA","FechaAlta":"2013-05-10","FechaBaja":""}
+,{"docType":"AFIJOS","IDAfijo":23,"Nombre":"EL LAGO ANDARA","FechaAlta":"2005-06-17","FechaBaja":""}
+,{"docType":"AFIJOS","IDAfijo":24,"Nombre":"LAS MERINDADES","FechaAlta":"1993-12-26","FechaBaja":""}
+,{"docType":"AFIJOS","IDAfijo":25,"Nombre":"SILVER POISE","FechaAlta":"2015-01-20","FechaBaja":""}
+,{"docType":"AFIJOS","IDAfijo":26,"Nombre":"VEGA DE LA MARTINA","FechaAlta":"2017-12-06","FechaBaja":""}
+,{"docType":"AFIJOS","IDAfijo":27,"Nombre":"ALTAGIS","FechaAlta":"1996-06-28","FechaBaja":""}
+,{"docType":"AFIJOS","IDAfijo":28,"Nombre":"GUARDIANES DEL SILENCIO","FechaAlta":"2017-07-16","FechaBaja":""}
+,{"docType":"AFIJOS","IDAfijo":29,"Nombre":"SONTAY","FechaAlta":"1995-06-20","FechaBaja":""}
+,{"docType":"AFIJOS","IDAfijo":30,"Nombre":"VALESTORY","FechaAlta":"2013-08-07","FechaBaja":""}
+,{"docType":"AFIJOS","IDAfijo":31,"Nombre":"ANXOS","FechaAlta":"2006-03-19","FechaBaja":""}
+,{"docType":"AFIJOS","IDAfijo":32,"Nombre":"ORUMNILAI","FechaAlta":"1997-01-06","FechaBaja":""}
+,{"docType":"AFIJOS","IDAfijo":33,"Nombre":"YORSHICAN","FechaAlta":"2000-07-28","FechaBaja":""}
+,{"docType":"AFIJOS","IDAfijo":34,"Nombre":"DU MAS DE NAÏLYS","FechaAlta":"2018-07-28","FechaBaja":""}
+,{"docType":"AFIJOS","IDAfijo":35,"Nombre":"LA VEGA DE AZAHAR","FechaAlta":"2015-10-01","FechaBaja":""}
+,{"docType":"AFIJOS","IDAfijo":36,"Nombre":"SORIENA","FechaAlta":"2002-05-29","FechaBaja":""}
+,{"docType":"AFIJOS","IDAfijo":37,"Nombre":"EL BOSQUE DE LUGH","FechaAlta":"1998-11-29","FechaBaja":""}
+,{"docType":"AFIJOS","IDAfijo":38,"Nombre":"TARAWAY","FechaAlta":"1994-02-02","FechaBaja":""}
+,{"docType":"AFIJOS","IDAfijo":39,"Nombre":"CHOWS OF THE ISLAND","FechaAlta":"2007-11-06","FechaBaja":""}
+,{"docType":"AFIJOS","IDAfijo":40,"Nombre":"ANNANGELS","FechaAlta":"2008-12-18","FechaBaja":""}
+,{"docType":"AFIJOS","IDAfijo":41,"Nombre":"FORATA","FechaAlta":"2000-08-25","FechaBaja":""}
+,{"docType":"AFIJOS","IDAfijo":42,"Nombre":"DASHLUT","FechaAlta":"2010-06-25","FechaBaja":""}
+,{"docType":"AFIJOS","IDAfijo":43,"Nombre":"ZAFFIRO BLU","FechaAlta":"2002-06-14","FechaBaja":""}
+,{"docType":"AFIJOS","IDAfijo":44,"Nombre":"TIERRA DEL VIENTO","FechaAlta":"2014-12-10","FechaBaja":""}
+,{"docType":"AFIJOS","IDAfijo":45,"Nombre":"DELS PELUTS","FechaAlta":"2019-05-06","FechaBaja":""}
+,{"docType":"AFIJOS","IDAfijo":46,"Nombre":"FUENTE BLANCA","FechaAlta":"2003-11-21","FechaBaja":""}
+,{"docType":"AFIJOS","IDAfijo":47,"Nombre":"MANADA DE MELVIC","FechaAlta":"1995-07-20","FechaBaja":""}
+,{"docType":"AFIJOS","IDAfijo":48,"Nombre":"JUNGLA NEGRA","FechaAlta":"2000-03-14","FechaBaja":""}
+,{"docType":"AFIJOS","IDAfijo":49,"Nombre":"SOTO DE RIOFRIO","FechaAlta":"1993-09-24","FechaBaja":""}
+,{"docType":"AFIJOS","IDAfijo":50,"Nombre":"GARDELCAN","FechaAlta":"2002-03-08","FechaBaja":""}
 ]
