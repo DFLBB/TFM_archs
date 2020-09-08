@@ -1,12 +1,12 @@
-[{"docType":"AFIJOS","IDVacunaProteccion":1,"Nombre":"Vacuna contra el moquillo canino","FechaAlta":"2020-08-29","FechaBaja":""}
-,{"docType":"AFIJOS","IDVacunaProteccion":2,"Nombre":"Vacuna contra la hepatitis infecciosa","FechaAlta":"2020-08-29","FechaBaja":""}
-,{"docType":"AFIJOS","IDVacunaProteccion":3,"Nombre":"Vacuna contra la leptospirosis","FechaAlta":"2020-08-29","FechaBaja":""}
-,{"docType":"AFIJOS","IDVacunaProteccion":4,"Nombre":"Vacuna contra el parvovirus","FechaAlta":"2020-08-29","FechaBaja":""}
-,{"docType":"AFIJOS","IDVacunaProteccion":5,"Nombre":"Vacuna contra el coronavirus","FechaAlta":"2020-08-29","FechaBaja":""}
-,{"docType":"AFIJOS","IDVacunaProteccion":6,"Nombre":"Vacuna contra la rabia","FechaAlta":"2020-08-29","FechaBaja":""}
-,{"docType":"AFIJOS","IDVacunaProteccion":7,"Nombre":"Vacuna contra la parainfluenza","FechaAlta":"2020-08-29","FechaBaja":""}
-,{"docType":"AFIJOS","IDVacunaProteccion":8,"Nombre":"Vacuna contra Bordetella bronchis?ptica","FechaAlta":"2020-08-29","FechaBaja":""}
-,{"docType":"AFIJOS","IDVacunaProteccion":9,"Nombre":"Vacuna contra borreliosis o enfermedad de Lyme","FechaAlta":"2020-08-29","FechaBaja":""}
-,{"docType":"AFIJOS","IDVacunaProteccion":10,"Nombre":"Vacuna contra herpesvirus canino","FechaAlta":"2020-08-29","FechaBaja":""}
-,{"docType":"AFIJOS","IDVacunaProteccion":11,"Nombre":"Vacuna contra la leishmaniasis","FechaAlta":"2020-08-29","FechaBaja":""}
+[{"docType":"VACUNAS_PROTECCION","IDVacunaProteccion":1,"Nombre":"Vacuna contra el moquillo canino","FechaAlta":"2020-08-29","FechaBaja":""}
+,{"docType":"VACUNAS_PROTECCION","IDVacunaProteccion":2,"Nombre":"Vacuna contra la hepatitis infecciosa","FechaAlta":"2020-08-29","FechaBaja":""}
+,{"docType":"VACUNAS_PROTECCION","IDVacunaProteccion":3,"Nombre":"Vacuna contra la leptospirosis","FechaAlta":"2020-08-29","FechaBaja":""}
+,{"docType":"VACUNAS_PROTECCION","IDVacunaProteccion":4,"Nombre":"Vacuna contra el parvovirus","FechaAlta":"2020-08-29","FechaBaja":""}
+,{"docType":"VACUNAS_PROTECCION","IDVacunaProteccion":5,"Nombre":"Vacuna contra el coronavirus","FechaAlta":"2020-08-29","FechaBaja":""}
+,{"docType":"VACUNAS_PROTECCION","IDVacunaProteccion":6,"Nombre":"Vacuna contra la rabia","FechaAlta":"2020-08-29","FechaBaja":""}
+,{"docType":"VACUNAS_PROTECCION","IDVacunaProteccion":7,"Nombre":"Vacuna contra la parainfluenza","FechaAlta":"2020-08-29","FechaBaja":""}
+,{"docType":"VACUNAS_PROTECCION","IDVacunaProteccion":8,"Nombre":"Vacuna contra Bordetella bronchis?ptica","FechaAlta":"2020-08-29","FechaBaja":""}
+,{"docType":"VACUNAS_PROTECCION","IDVacunaProteccion":9,"Nombre":"Vacuna contra borreliosis o enfermedad de Lyme","FechaAlta":"2020-08-29","FechaBaja":""}
+,{"docType":"VACUNAS_PROTECCION","IDVacunaProteccion":10,"Nombre":"Vacuna contra herpesvirus canino","FechaAlta":"2020-08-29","FechaBaja":""}
+,{"docType":"VACUNAS_PROTECCION","IDVacunaProteccion":11,"Nombre":"Vacuna contra la leishmaniasis","FechaAlta":"2020-08-29","FechaBaja":""}
 ]
