@@ -78,38 +78,46 @@ func (tcc *ThisChainCode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 
 func (tcc *ThisChainCode) registrarPersona(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
-	fmt.Println("- PersonasChaincode --- registrarPersona()")
+	fmt.Println(fmt.Sprintf(" - %s --- %s()", cc_cfg.CFG_ChainCodeName, cc_util.NombreFuncion()))
 
-	if len(args) != 2 {
-		return shim.Error("Incorrecto numero de argumentos. Esperando 2")
+	/*
+		if len(args) != 2 {
+			return shim.Error("Incorrecto numero de argumentos. Esperando 2")
+		}
+
+		// ---------------------------------------------------------------------------------------------------
+		// VALIDAR Argumentos
+		// ---------------------------------------------------------------------------------------------------
+
+		DatosSeguridadComoJson := []byte(args[1])
+
+		var datosSeguridad cc_util.TipoSeguridad
+
+		err := json.Unmarshal(DatosSeguridadComoJson, &datosSeguridad)
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		IDPersonaEjecuta := datosSeguridad.IDPersona
+
+		queryString := "{\"selector\":{\"docType\":\"" + cc_cfg.CFG_ObjectType + "\",\"IDPersona\":" + strconv.Itoa(IDPersonaEjecuta) + "}}"
+		queryResults, err := getQueryResultForQueryString(stub, queryString)
+
+		if err != nil {
+			return shim.Error(err.Error())
+		}
+
+		if string(queryResults) == "[]" {
+			return shim.Error("(Args[1]) IDPersona: [ " + strconv.Itoa(IDPersonaEjecuta) + " ] no existe o no es valido")
+		}
+	*/
+
+	if len(args) != 1 {
+		return shim.Error("Incorrecto numero de argumentos. Esperando 1")
 	}
 
 	// ---------------------------------------------------------------------------------------------------
 	// VALIDAR Argumentos
-	// ---------------------------------------------------------------------------------------------------
-
-	DatosSeguridadComoJson := []byte(args[1])
-
-	var datosSeguridad cc_util.TipoSeguridad
-
-	err := json.Unmarshal(DatosSeguridadComoJson, &datosSeguridad)
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	IDPersonaEjecuta := datosSeguridad.IDPersona
-
-	queryString := "{\"selector\":{\"docType\":\"" + cc_cfg.CFG_ObjectType + "\",\"IDPersona\":" + strconv.Itoa(IDPersonaEjecuta) + "}}"
-	queryResults, err := getQueryResultForQueryString(stub, queryString)
-
-	if err != nil {
-		return shim.Error(err.Error())
-	}
-
-	if string(queryResults) == "[]" {
-		return shim.Error("(Args[1]) IDPersona: [ " + strconv.Itoa(IDPersonaEjecuta) + " ] no existe o no es valido")
-	}
-
 	// ---------------------------------------------------------------------------------------------------
 
 	var datosPersona cc_cfg.Personas
