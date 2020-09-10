@@ -53,6 +53,8 @@ func (tcc *ThisChainCode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 
 	} else if function == "cargarDatosIniciales" {
 		return tcc.cargarDatosIniciales(stub, args)
+	} else if function == "consultarMicrochip" {
+		return tcc.consultarMicrochip(stub, args)
 
 	} else if function == "asignarEstado" {
 		return tcc.asignarEstado(stub, args)
@@ -274,6 +276,15 @@ func (tcc *ThisChainCode) registrarMicrochipPerro(stub shim.ChaincodeStubInterfa
 
 	return shim.Success(nuevoMicrochipPerroAsBytes)
 
+}
+
+func (tcc *ThisChainCode) consultarMicrochip(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	fmt.Println(fmt.Sprintf(" - %s --- %s()", cc_cfg.CFG_ChainCodeName, cc_util.NombreFuncion()))
+
+	retorno := " ********** FUNCION " + cc_util.NombreFuncion() + " SIN IMPLEMENTAR **********"
+	fmt.Println(retorno)
+
+	return shim.Success([]byte(retorno))
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////

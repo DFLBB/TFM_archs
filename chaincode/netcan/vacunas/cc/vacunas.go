@@ -69,6 +69,10 @@ func (tcc *ThisChainCode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		return tcc.cargarDatosIniciales_VacunasPerrosProteccion(stub, args)
 	} else if function == "cargarDatosIniciales_VacunasProteccion" {
 		return tcc.cargarDatosIniciales_VacunasProteccion(stub, args)
+	} else if function == "obtenerCertificadoVacunaciones " {
+		return tcc.obtenerCertificadoVacunaciones(stub, args)
+	} else if function == "consultarVacunaciones" {
+		return tcc.consultarVacunaciones(stub, args)
 
 	} else {
 		return shim.Error("(" + cc_cfg.CFG_ObjectType + ") Invalida un nombre de funcion no valida (" + function + ")")
@@ -444,6 +448,24 @@ func (tcc *ThisChainCode) registrarVacunaPerro(stub shim.ChaincodeStubInterface,
 	// ---------------------------------------------------------------------------------------------------
 
 	return shim.Success(retorno.Bytes())
+}
+
+func (tcc *ThisChainCode) obtenerCertificadoVacunaciones(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	fmt.Println(fmt.Sprintf(" - %s --- %s()", cc_cfg.CFG_ChainCodeName, cc_util.NombreFuncion()))
+
+	retorno := " ********** FUNCION " + cc_util.NombreFuncion() + " SIN IMPLEMENTAR **********"
+	fmt.Println(retorno)
+
+	return shim.Success([]byte(retorno))
+}
+
+func (tcc *ThisChainCode) consultarVacunaciones(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	fmt.Println(fmt.Sprintf(" - %s --- %s()", cc_cfg.CFG_ChainCodeName, cc_util.NombreFuncion()))
+
+	retorno := " ********** FUNCION " + cc_util.NombreFuncion() + " SIN IMPLEMENTAR **********"
+	fmt.Println(retorno)
+
+	return shim.Success([]byte(retorno))
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////

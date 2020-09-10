@@ -77,6 +77,14 @@ func (tcc *ThisChainCode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		return tcc.cargarDatosIniciales(stub, args)
 	} else if function == "cargarDatosIniciales_Propietarios" {
 		return tcc.cargarDatosIniciales_Propietarios(stub, args)
+	} else if function == "consultarDatosEjemplar" {
+		return tcc.consultarDatosEjemplar(stub, args)
+	} else if function == "obtenerCertificadoRegistro" {
+		return tcc.obtenerCertificadoRegistro(stub, args)
+	} else if function == "obtenerPedigri" {
+		return tcc.obtenerPedigri(stub, args)
+	} else if function == "registrarCesionTemporal " {
+		return tcc.registrarCesionTemporal(stub, args)
 
 	} else {
 		return shim.Error("(" + cc_cfg.CFG_ObjectType + ") Invalida un nombre de funcion no valida (" + function + ")")
@@ -1129,6 +1137,41 @@ func (tcc *ThisChainCode) registrarReconocimientoRaza(stub shim.ChaincodeStubInt
 
 	return shim.Success(datosRegistroAsBytes)
 
+}
+func (tcc *ThisChainCode) consultarDatosEjemplar(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	fmt.Println(fmt.Sprintf(" - %s --- %s()", cc_cfg.CFG_ChainCodeName, cc_util.NombreFuncion()))
+
+	retorno := " ********** FUNCION " + cc_util.NombreFuncion() + " SIN IMPLEMENTAR **********"
+	fmt.Println(retorno)
+
+	return shim.Success([]byte(retorno))
+}
+
+func (tcc *ThisChainCode) obtenerCertificadoRegistro(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	fmt.Println(fmt.Sprintf(" - %s --- %s()", cc_cfg.CFG_ChainCodeName, cc_util.NombreFuncion()))
+
+	retorno := " ********** FUNCION " + cc_util.NombreFuncion() + " SIN IMPLEMENTAR **********"
+	fmt.Println(retorno)
+
+	return shim.Success([]byte(retorno))
+}
+
+func (tcc *ThisChainCode) obtenerPedigri(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	fmt.Println(fmt.Sprintf(" - %s --- %s()", cc_cfg.CFG_ChainCodeName, cc_util.NombreFuncion()))
+
+	retorno := " ********** FUNCION " + cc_util.NombreFuncion() + " SIN IMPLEMENTAR **********"
+	fmt.Println(retorno)
+
+	return shim.Success([]byte(retorno))
+}
+
+func (tcc *ThisChainCode) registrarCesionTemporal(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	fmt.Println(fmt.Sprintf(" - %s --- %s()", cc_cfg.CFG_ChainCodeName, cc_util.NombreFuncion()))
+
+	retorno := " ********** FUNCION " + cc_util.NombreFuncion() + " SIN IMPLEMENTAR **********"
+	fmt.Println(retorno)
+
+	return shim.Success([]byte(retorno))
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////

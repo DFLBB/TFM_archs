@@ -50,7 +50,6 @@ func (tcc *ThisChainCode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		return tcc.registrarAfijo(stub, args)
 	} else if function == "registrarCambioPropietario" {
 		return tcc.registrarCambioPropietario(stub, args)
-
 	} else if function == "registrarCancelacionAfijo" {
 		return tcc.registrarCancelacionAfijo(stub, args)
 
@@ -69,6 +68,10 @@ func (tcc *ThisChainCode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		return tcc.cargarDatosIniciales(stub, args)
 	} else if function == "cargarDatosIniciales_Propietarios" {
 		return tcc.cargarDatosIniciales_Propietarios(stub, args)
+	} else if function == "consultarDatosAfijo" {
+		return tcc.consultarDatosAfijo(stub, args)
+	} else if function == "obtenerCertificadoAfijo" {
+		return tcc.obtenerCertificadoAfijo(stub, args)
 
 	} else {
 		return shim.Error("(" + cc_cfg.CFG_ObjectType + ") Invalida un nombre de funcion no valida (" + function + ")")
@@ -673,6 +676,24 @@ func (tcc *ThisChainCode) registrarCancelacionAfijo(stub shim.ChaincodeStubInter
 
 	return shim.Success(retorno.Bytes())
 
+}
+
+func (tcc *ThisChainCode) consultarDatosAfijo(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	fmt.Println(fmt.Sprintf(" - %s --- %s()", cc_cfg.CFG_ChainCodeName, cc_util.NombreFuncion()))
+
+	retorno := " ********** FUNCION " + cc_util.NombreFuncion() + " SIN IMPLEMENTAR **********"
+	fmt.Println(retorno)
+
+	return shim.Success([]byte(retorno))
+}
+
+func (tcc *ThisChainCode) obtenerCertificadoAfijo(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	fmt.Println(fmt.Sprintf(" - %s --- %s()", cc_cfg.CFG_ChainCodeName, cc_util.NombreFuncion()))
+
+	retorno := " ********** FUNCION " + cc_util.NombreFuncion() + " SIN IMPLEMENTAR **********"
+	fmt.Println(retorno)
+
+	return shim.Success([]byte(retorno))
 }
 
 func (tcc *ThisChainCode) cargarDatosIniciales(stub shim.ChaincodeStubInterface, args []string) pb.Response {
