@@ -1,2 +1,2 @@
 # json
-.json files for Master´s Thesis
+Files for Master´s Thesis
