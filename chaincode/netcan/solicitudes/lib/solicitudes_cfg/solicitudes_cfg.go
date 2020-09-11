@@ -33,3 +33,18 @@ type SolicitudesAutorizaciones struct {
 	FechaAlta       string `json:"FechaAlta"`
 	FechaBaja       string `json:"FechaBaja"`
 }
+
+type TipoValidarSolicitud struct {
+	IDSolicitud     int    `json:"IDSolicitud"`
+	EstadoSolicitud string `json:"EstadoSolicitud"`
+}
+
+type TipoQuerySolicitudes struct {
+	Key    string      `json:"Key"`
+	Record Solicitudes `json:"Record"`
+}
+
+type TipoQuerySolicitudesAutorizaciones struct {
+	Key    string                    `json:"Key"`
+	Record SolicitudesAutorizaciones `json:"Record"`
+}

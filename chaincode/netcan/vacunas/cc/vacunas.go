@@ -75,7 +75,7 @@ func (tcc *ThisChainCode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		return tcc.consultarVacunaciones(stub, args)
 
 	} else {
-		return shim.Error("(" + cc_cfg.CFG_ObjectType + ") Invalida un nombre de funcion no valida (" + function + ")")
+		return shim.Error("(" + cc_cfg.CFG_ObjectType + ") Invoca un nombre de funcion no valida (" + function + ")")
 	}
 
 	return shim.Success(nil)

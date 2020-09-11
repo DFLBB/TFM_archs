@@ -68,7 +68,7 @@ func (tcc *ThisChainCode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		return tcc.ejecutarConsulta(stub, args)
 
 	} else {
-		return shim.Error("(" + cc_cfg.CFG_ObjectType + ") Invalida un nombre de funcion no valida (" + function + ")")
+		return shim.Error("(" + cc_cfg.CFG_ObjectType + ") Invoca un nombre de funcion no valida (" + function + ")")
 	}
 
 	return shim.Success(nil)
@@ -80,38 +80,6 @@ func (tcc *ThisChainCode) registrarPersona(stub shim.ChaincodeStubInterface, arg
 
 	fmt.Println(fmt.Sprintf(" - %s --- %s()", cc_cfg.CFG_ChainCodeName, cc_util.NombreFuncion()))
 
-	/*
-		if len(args) != 2 {
-			return shim.Error("Incorrecto numero de argumentos. Esperando 2")
-		}
-
-		// ---------------------------------------------------------------------------------------------------
-		// VALIDAR Argumentos
-		// ---------------------------------------------------------------------------------------------------
-
-		DatosSeguridadComoJson := []byte(args[1])
-
-		var datosSeguridad cc_util.TipoSeguridad
-
-		err := json.Unmarshal(DatosSeguridadComoJson, &datosSeguridad)
-		if err != nil {
-			fmt.Println(err)
-		}
-
-		IDPersonaEjecuta := datosSeguridad.IDPersona
-
-		queryString := "{\"selector\":{\"docType\":\"" + cc_cfg.CFG_ObjectType + "\",\"IDPersona\":" + strconv.Itoa(IDPersonaEjecuta) + "}}"
-		queryResults, err := getQueryResultForQueryString(stub, queryString)
-
-		if err != nil {
-			return shim.Error(err.Error())
-		}
-
-		if string(queryResults) == "[]" {
-			return shim.Error("(Args[1]) IDPersona: [ " + strconv.Itoa(IDPersonaEjecuta) + " ] no existe o no es valido")
-		}
-	*/
-
 	if len(args) != 1 {
 		return shim.Error("Incorrecto numero de argumentos. Esperando 1")
 	}
@@ -121,7 +89,7 @@ func (tcc *ThisChainCode) registrarPersona(stub shim.ChaincodeStubInterface, arg
 	// ---------------------------------------------------------------------------------------------------
 
 	var datosPersona cc_cfg.Personas
-	err = json.Unmarshal([]byte(args[0]), &datosPersona)
+	err := json.Unmarshal([]byte(args[0]), &datosPersona)
 	if err != nil {
 		return shim.Error("(Args[0]) (Datos Persona) - " + err.Error())
 	}
@@ -170,7 +138,7 @@ func (tcc *ThisChainCode) registrarPersona(stub shim.ChaincodeStubInterface, arg
 
 	// ---------------------------------------------------------------------------------------------------
 
-	queryString = fmt.Sprintf("{\"selector\":{\"docType\":\"%s\",\"TipoDocumento\":\"%s\",\"IdentificadorDocumento\":\"%s\",\"PaisEmisor\":\"%s\"}}",
+	queryString := fmt.Sprintf("{\"selector\":{\"docType\":\"%s\",\"TipoDocumento\":\"%s\",\"IdentificadorDocumento\":\"%s\",\"PaisEmisor\":\"%s\"}}",
 		cc_cfg.CFG_ObjectType,
 		TipoDocumento,
 		IdentificadorDocumento,
@@ -178,7 +146,7 @@ func (tcc *ThisChainCode) registrarPersona(stub shim.ChaincodeStubInterface, arg
 
 	fmt.Println(queryString)
 
-	queryResults, err = getQueryResultForQueryString(stub, queryString)
+	queryResults, err := getQueryResultForQueryString(stub, queryString)
 
 	if err != nil {
 		return shim.Error(err.Error())

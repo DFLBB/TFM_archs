@@ -74,7 +74,7 @@ func (tcc *ThisChainCode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		return tcc.obtenerCertificadoAfijo(stub, args)
 
 	} else {
-		return shim.Error("(" + cc_cfg.CFG_ObjectType + ") Invalida un nombre de funcion no valida (" + function + ")")
+		return shim.Error("(" + cc_cfg.CFG_ObjectType + ") Invoca un nombre de funcion no valida (" + function + ")")
 	}
 }
 
@@ -84,13 +84,13 @@ func (tcc *ThisChainCode) registrarAfijo(stub shim.ChaincodeStubInterface, args 
 
 	fmt.Println(fmt.Sprintf(" - %s --- %s()", cc_cfg.CFG_ChainCodeName, cc_util.NombreFuncion()))
 
-	type tipoRegistrarAfijoPropietario struct {
+	type TipoRegistrarAfijoPropietario struct {
 		IDPersona int `json:"IDPersona"`
 	}
 
-	type tipoRegistrarAfijo struct {
+	type TipoRegistrarAfijo struct {
 		Nombre       string                          `json:"Nombre"`
-		Propietarios []tipoRegistrarAfijoPropietario `json:"Propietarios"`
+		Propietarios []TipoRegistrarAfijoPropietario `json:"Propietarios"`
 	}
 
 	// ---------------------------------------------------------------------------------------------------
@@ -103,7 +103,7 @@ func (tcc *ThisChainCode) registrarAfijo(stub shim.ChaincodeStubInterface, args 
 
 	DatosAfijoComoJson := []byte(args[0])
 
-	var datosAfijo tipoRegistrarAfijo
+	var datosAfijo TipoRegistrarAfijo
 	err := json.Unmarshal(DatosAfijoComoJson, &datosAfijo)
 	if err != nil {
 		fmt.Println(err)
@@ -322,13 +322,13 @@ func (tcc *ThisChainCode) registrarCambioPropietario(stub shim.ChaincodeStubInte
 
 	fmt.Println(fmt.Sprintf(" - %s --- %s()", cc_cfg.CFG_ChainCodeName, cc_util.NombreFuncion()))
 
-	type tiporegistrarCambioPropietarioPropietario struct {
+	type TipoRegistrarCambioPropietarioPropietario struct {
 		IDPersona int `json:"IDPersona"`
 	}
 
-	type tiporegistrarCambioPropietario struct {
+	type TipoRegistrarCambioPropietario struct {
 		IDAfijo      int                                         `json:"IDAfijo"`
-		Propietarios []tiporegistrarCambioPropietarioPropietario `json:"Propietarios"`
+		Propietarios []TipoRegistrarCambioPropietarioPropietario `json:"Propietarios"`
 	}
 
 	type tipoQueryAfijosPropietarios struct {
@@ -346,7 +346,7 @@ func (tcc *ThisChainCode) registrarCambioPropietario(stub shim.ChaincodeStubInte
 
 	DatosAfijoComoJson := []byte(args[0])
 
-	var datosAfijo tiporegistrarCambioPropietario
+	var datosAfijo TipoRegistrarCambioPropietario
 	err := json.Unmarshal(DatosAfijoComoJson, &datosAfijo)
 	if err != nil {
 		fmt.Println(err)
@@ -559,7 +559,7 @@ func (tcc *ThisChainCode) registrarCancelacionAfijo(stub shim.ChaincodeStubInter
 
 	DatosAfijoComoJson := []byte(args[0])
 
-	var datosAfijo cc_cfg.TiporegistrarCancelacionAfijo
+	var datosAfijo cc_cfg.TipoRegistrarCancelacionAfijo
 	err := json.Unmarshal(DatosAfijoComoJson, &datosAfijo)
 	if err != nil {
 		fmt.Println(err)

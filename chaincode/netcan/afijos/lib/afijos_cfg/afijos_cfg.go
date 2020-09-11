@@ -23,16 +23,16 @@ type AfijosPropietarios struct {
 	FechaBaja          string `json:"FechaBaja"`
 }
 
-type TiporegistrarCambioPropietarioPropietario struct {
+type TipoRegistrarCambioPropietarioPropietario struct {
 	IDPersona int `json:"IDPersona"`
 }
 
-type TiporegistrarCambioPropietario struct {
+type TipoRegistrarCambioPropietario struct {
 	IDAfijo      int                                         `json:"IDAfijo"`
-	Propietarios []TiporegistrarCambioPropietarioPropietario `json:"Propietarios"`
+	Propietarios []TipoRegistrarCambioPropietarioPropietario `json:"Propietarios"`
 }
 
-type TiporegistrarCancelacionAfijo struct {
+type TipoRegistrarCancelacionAfijo struct {
 	IDAfijo int `json:"IDAfijo"`
 }
 

@@ -15,13 +15,6 @@ import (
 	cc_perros_cfg "github.com/chaincode/netcan/perros/lib/perros_cfg"
 	cc_personas_cfg "github.com/chaincode/netcan/personas/lib/personas_cfg"
 
-	/*
-		cc_personas_cfg "github.com/chaincode/netcan/personas/lib/personas_cfg"
-		cc_afijos_cfg "github.com/chaincode/netcan/afijos/lib/afijos_cfg"
-		cc_razas_cfg "github.com/chaincode/netcan/razas/lib/razas_cfg"
-		cc_perros_cfg "github.com/chaincode/netcan/perros/lib/perros_cfg"
-	*/
-
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	pb "github.com/hyperledger/fabric/protos/peer"
 )
@@ -93,7 +86,7 @@ func (tcc *ThisChainCode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		return tcc.ejecutarConsulta(stub, args)
 
 	} else {
-		return shim.Error("(" + cc_cfg.CFG_ObjectType + ") Invalida un nombre de funcion no valida (" + function + ")")
+		return shim.Error("(" + cc_cfg.CFG_ObjectType + ") Invoca un nombre de funcion no valida (" + function + ")")
 	}
 }
 
@@ -101,22 +94,7 @@ func (tcc *ThisChainCode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 
 func (tcc *ThisChainCode) validarSolicitud(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
-	type tipoValidarSolicitud struct {
-		IDSolicitud     int    `json:"IDSolicitud"`
-		EstadoSolicitud string `json:"EstadoSolicitud"`
-	}
-
-	type tipoQuerySolicitudes struct {
-		Key    string             `json:"Key"`
-		Record cc_cfg.Solicitudes `json:"Record"`
-	}
-
-	type tipoQuerySolicitudesAutorizaciones struct {
-		Key    string                           `json:"Key"`
-		Record cc_cfg.SolicitudesAutorizaciones `json:"Record"`
-	}
-
-	fmt.Println("- SolicitudesChaincode --- validarSolicitud()")
+	fmt.Println(fmt.Sprintf(" - %s --- %s()", cc_cfg.CFG_ChainCodeName, cc_util.NombreFuncion()))
 
 	// ---------------------------------------------------------------------------------------------------
 	// VALIDAR Argumentos
@@ -158,7 +136,7 @@ func (tcc *ThisChainCode) validarSolicitud(stub shim.ChaincodeStubInterface, arg
 
 	ValidadionSolicitudComoJson := []byte(args[0])
 
-	var validacionSolicitud tipoValidarSolicitud
+	var validacionSolicitud cc_cfg.TipoValidarSolicitud
 	err = json.Unmarshal(ValidadionSolicitudComoJson, &validacionSolicitud)
 	if err != nil {
 		fmt.Println(err)
@@ -192,7 +170,7 @@ func (tcc *ThisChainCode) validarSolicitud(stub shim.ChaincodeStubInterface, arg
 
 	// ---------------------------------------------------------------------------------------------------
 
-	var querySolicitudesAutorizaciones []tipoQuerySolicitudesAutorizaciones
+	var querySolicitudesAutorizaciones []cc_cfg.TipoQuerySolicitudesAutorizaciones
 	err = json.Unmarshal(queryResults, &querySolicitudesAutorizaciones)
 	if err != nil {
 		fmt.Println(err)
@@ -232,7 +210,39 @@ func (tcc *ThisChainCode) validarSolicitud(stub shim.ChaincodeStubInterface, arg
 	// Ejecutar solicitud (si se puede)
 	// ---------------------------------------------------------------------------------------------------
 
-	if cc_cfg.SolicitudEstadoPendiente != cc_cfg.SolicitudEstadoRechazado {
+	if SolicitudEstado == cc_cfg.SolicitudEstadoRechazado {
+
+		queryString = fmt.Sprintf(
+			"{\"selector\":{ \"docType\":\"%s\", \"IDSolicitud\":%d}}",
+			cc_cfg.CFG_ObjectType,
+			IDSolicitud)
+
+		queryResults, err = getQueryResultForQueryString(stub, queryString)
+		if err != nil {
+			return shim.Error(err.Error())
+		}
+
+		var querySolicitudes []cc_cfg.TipoQuerySolicitudes
+
+		err = json.Unmarshal(queryResults, &querySolicitudes)
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		querySolicitudes[0].Record.EstadoSolicitud = cc_cfg.SolicitudEstadoRechazado
+		querySolicitudes[0].Record.FechaEjecucion = fechaHoraActualAsString
+
+		cambiarSolicitudAsBytes, err := json.Marshal(querySolicitudes[0].Record)
+		if err != nil {
+			return shim.Error(err.Error())
+		}
+
+		err = stub.PutState(cc_cfg.CFG_ObjectType+strconv.Itoa(IDSolicitud), cambiarSolicitudAsBytes)
+		if err != nil {
+			return shim.Error(err.Error())
+		}
+
+	} else if SolicitudEstado == cc_cfg.SolicitudEstadoAprobado {
 
 		queryString = fmt.Sprintf(
 			"{\"selector\":{ \"docType\":\"%s\", \"IDSolicitud\":%d}}",
@@ -275,13 +285,33 @@ func (tcc *ThisChainCode) validarSolicitud(stub shim.ChaincodeStubInterface, arg
 				return shim.Error(err.Error())
 			}
 
-			var querySolicitudes []tipoQuerySolicitudes
+			var querySolicitudes []cc_cfg.TipoQuerySolicitudes
 			var response pb.Response
 
 			err = json.Unmarshal(queryResults, &querySolicitudes)
 			if err != nil {
 				fmt.Println(err)
 			}
+
+			querySolicitudes[0].Record.EstadoSolicitud = cc_cfg.SolicitudEstadoAprobado
+			querySolicitudes[0].Record.FechaEjecucion = fechaHoraActualAsString
+
+			cambiarSolicitudAsBytes, err := json.Marshal(querySolicitudes[0].Record)
+			if err != nil {
+				return shim.Error(err.Error())
+			}
+
+			err = stub.PutState(cc_cfg.CFG_ObjectType+strconv.Itoa(IDSolicitud), cambiarSolicitudAsBytes)
+			if err != nil {
+				return shim.Error(err.Error())
+			}
+
+			/*
+				fmt.Println("****************************************")
+				fmt.Println(strconv.Itoa(IDSolicitud))
+				fmt.Println(string(cambiarSolicitudAsBytes))
+				fmt.Println("****************************************")
+			*/
 
 			TipoSolicitud := querySolicitudes[0].Record.TipoSolicitud
 			JSONSolicitud := querySolicitudes[0].Record.JSONSolicitud
@@ -315,18 +345,6 @@ func (tcc *ThisChainCode) validarSolicitud(stub shim.ChaincodeStubInterface, arg
 				return shim.Success(response.Payload)
 			}
 
-			querySolicitudes[0].Record.EstadoSolicitud = cc_cfg.SolicitudEstadoAprobado
-			querySolicitudes[0].Record.FechaEjecucion = fechaHoraActualAsString
-
-			cambiarSolicitudAsBytes, err := json.Marshal(querySolicitudes[0].Record)
-			if err != nil {
-				return shim.Error(err.Error())
-			}
-
-			err = stub.PutState(cc_cfg.CFG_ObjectType+strconv.Itoa(IDSolicitud), cambiarSolicitudAsBytes)
-			if err != nil {
-				return shim.Error(err.Error())
-			}
 		}
 	}
 	return shim.Success(querySolicitudesAutorizacionesAsBytes)
@@ -402,30 +420,6 @@ func (tcc *ThisChainCode) solicitarRegistrarPerro(stub shim.ChaincodeStubInterfa
 
 	fmt.Println(fmt.Sprintf(" - %s --- %s()", cc_cfg.CFG_ChainCodeName, cc_util.NombreFuncion()))
 
-	type tipoRegistrarCamadaPerro struct {
-		Nombre string `json:"Nombre"`
-		IDSexo int    `json:"IDSexo"`
-	}
-
-	type tipoRegistrarCamadaPropietario struct {
-		IDPersona int `json:"IDPersona"`
-	}
-
-	type tipoRegistrarCamada struct {
-		Perros          []tipoRegistrarCamadaPerro       `json:"Perros"`
-		IDPerroMadre    int                              `json:"IDPerroMadre"`
-		IDPerroPadre    int                              `json:"IDPerroPadre"`
-		IDAfijo         int                              `json:"IDAfijo"`
-		IDRaza          int                              `json:"idRaza"`
-		FechaNacimiento string                           `json:"fechaNacimiento"`
-		Propietarios    []tipoRegistrarCamadaPropietario `json:"Propietarios"`
-	}
-
-	type tipoQueryPerrosPropietarios struct {
-		Key    string                           `json:"Key"`
-		Record cc_perros_cfg.PerrosPropietarios `json:"Record"`
-	}
-
 	// ---------------------------------------------------------------------------------------------------
 	// VALIDAR Argumentos
 	// ---------------------------------------------------------------------------------------------------
@@ -465,7 +459,7 @@ func (tcc *ThisChainCode) solicitarRegistrarPerro(stub shim.ChaincodeStubInterfa
 	// ---------------------------------------------------------------------------------------------------
 
 	DatosSolicitudComoJson := []byte(args[0])
-	var datosSolicitud tipoRegistrarCamada
+	var datosSolicitud cc_perros_cfg.TipoRegistrarCamada
 	err = json.Unmarshal(DatosSolicitudComoJson, &datosSolicitud)
 	if err != nil {
 		fmt.Println(err)
@@ -481,7 +475,7 @@ func (tcc *ThisChainCode) solicitarRegistrarPerro(stub shim.ChaincodeStubInterfa
 
 	IDPerroMadre := datosSolicitud.IDPerroMadre
 
-	var Propietarios []tipoRegistrarCamadaPropietario
+	var Propietarios []cc_perros_cfg.TipoRegistrarCamadaPropietario
 	propietariosArray := []int{}
 
 	if IDPerroMadre == 0 {
@@ -522,7 +516,7 @@ func (tcc *ThisChainCode) solicitarRegistrarPerro(stub shim.ChaincodeStubInterfa
 			return shim.Error("(Args[0]) IDPerroMadre: [ " + strconv.Itoa(IDPerroMadre) + " ] no tiene propietarios")
 		}
 
-		var queryPerrosPropietarios []tipoQueryPerrosPropietarios
+		var queryPerrosPropietarios []cc_perros_cfg.TipoQueryPerrosPropietarios
 
 		err = json.Unmarshal(response.Payload, &queryPerrosPropietarios)
 		if err != nil {
@@ -553,7 +547,7 @@ func (tcc *ThisChainCode) solicitarRegistrarPerro(stub shim.ChaincodeStubInterfa
 			return shim.Error("(Args[0]) IDPerroPadre: [ " + strconv.Itoa(IDPerroPadre) + " ] no tiene propietarios")
 		}
 
-		var queryPerrosPropietarios []tipoQueryPerrosPropietarios
+		var queryPerrosPropietarios []cc_perros_cfg.TipoQueryPerrosPropietarios
 
 		err = json.Unmarshal(response.Payload, &queryPerrosPropietarios)
 		if err != nil {
@@ -707,292 +701,6 @@ func (tcc *ThisChainCode) solicitarRegistrarPerro(stub shim.ChaincodeStubInterfa
 	return shim.Success(retorno.Bytes())
 }
 
-/*
-func (tcc *ThisChainCode) solicitarRegistrarPerro_OLD(stub shim.ChaincodeStubInterface, args []string, tipoRegistro string) pb.Response {
-
-	fmt.Println(fmt.Sprintf(" - %s --- %s()", cc_cfg.CFG_ChainCodeName, cc_util.NombreFuncion()))
-
-	type tipoRegistrarCamadaPerro struct {
-		Nombre string `json:"Nombre"`
-		IDSexo int    `json:"IDSexo"`
-	}
-
-	type tipoRegistrarCamadaPropietario struct {
-		IDPersona int `json:"IDPersona"`
-	}
-
-	type tipoRegistrarCamada struct {
-		Perros          []tipoRegistrarCamadaPerro       `json:"Perros"`
-		IDPerroMadre    int                              `json:"IDPerroMadre"`
-		IDPerroPadre    int                              `json:"IDPerroPadre"`
-		IDAfijo         int                              `json:"IDAfijo"`
-		IDRaza          int                              `json:"idRaza"`
-		FechaNacimiento string                           `json:"fechaNacimiento"`
-		Propietarios    []tipoRegistrarCamadaPropietario `json:"Propietarios"`
-	}
-
-	type tipoQueryPerrosPropietarios struct {
-		Key    string                           `json:"Key"`
-		Record cc_perros_cfg.PerrosPropietarios `json:"Record"`
-	}
-
-	// ---------------------------------------------------------------------------------------------------
-	// VALIDAR Argumentos
-	// ---------------------------------------------------------------------------------------------------
-
-	if len(args) != 3 {
-		return shim.Error("Incorrecto numero de argumentos. Esperando 3")
-	}
-
-	if len(tipoRegistro) <= 0 {
-		return shim.Error("Incorrecto numero de argumentos. Esperando valor de tipoRegistro")
-	}
-
-	// ---------------------------------------------------------------------------------------------------
-
-	DatosSeguridadComoJson := []byte(args[1])
-
-	var datosSeguridad cc_util.TipoSeguridad
-
-	err := json.Unmarshal(DatosSeguridadComoJson, &datosSeguridad)
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	IDPersonaEjecuta := datosSeguridad.IDPersona
-
-	queryString := "{\"selector\":{\"docType\":\"" + cc_personas_cfg.CFG_ObjectType + "\",\"IDPersona\":" + strconv.Itoa(IDPersonaEjecuta) + "}}"
-	response := stub.InvokeChaincode(cc_personas_cfg.CFG_ChainCodeName, cc_util.ToChaincodeArgs("ejecutarConsulta", queryString), stub.GetChannelID())
-
-	if response.Status != shim.OK {
-		return shim.Error(response.Message)
-	}
-
-	if string(response.Payload) == "[]" {
-		return shim.Error("(Args[1]) IDPersona: [ " + strconv.Itoa(IDPersonaEjecuta) + " ] no existe o no es valido")
-	}
-
-	// ---------------------------------------------------------------------------------------------------
-
-	DatosSolicitudComoJson := []byte(args[0])
-	var datosSolicitud tipoRegistrarCamada
-	err = json.Unmarshal(DatosSolicitudComoJson, &datosSolicitud)
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	fmt.Println(datosSolicitud)
-	fmt.Println(args[0])
-
-	PerrosCamada := datosSolicitud.Perros
-	if len(PerrosCamada) <= 0 {
-		return shim.Error("(Args[0]) PerrosCamada: debe tener un perro")
-	}
-
-	IDPerroMadre := datosSolicitud.IDPerroMadre
-
-	var Propietarios []tipoRegistrarCamadaPropietario
-	propietariosArray := []int{}
-
-	if IDPerroMadre == 0 {
-		Propietarios = datosSolicitud.Propietarios
-		if len(Propietarios) <= 0 {
-			return shim.Error("(Args[0]) Propietarios: debe tener un propietario")
-		}
-		for propietario := range Propietarios {
-
-			IDPropietarioNuevo := Propietarios[propietario].IDPersona
-
-			queryString := "{\"selector\":{\"docType\":\"" + cc_personas_cfg.CFG_ObjectType + "\",\"IDPersona\":" + strconv.Itoa(IDPropietarioNuevo) + "}}"
-			response := stub.InvokeChaincode(cc_personas_cfg.CFG_ChainCodeName, cc_util.ToChaincodeArgs("ejecutarConsulta", queryString), stub.GetChannelID())
-
-			if response.Status != shim.OK {
-				return shim.Error(response.Message)
-			}
-
-			if string(response.Payload) == "[]" {
-				return shim.Error("(Args[0]) IDPersona: [ " + strconv.Itoa(IDPropietarioNuevo) + " ] no existe o no es valido")
-			}
-
-			propietariosArray = append(propietariosArray, IDPropietarioNuevo)
-		}
-	} else {
-
-		if len(Propietarios) > 0 {
-			return shim.Error("(Args[0]) Propietarios: no debe tener definido un propietario")
-		}
-
-		queryString = "{\"selector\":{\"docType\":\"" + cc_perros_cfg.CFG_ObjectType_Propietarios + "\",\"IDPerro\":" + strconv.Itoa(IDPerroMadre) + ",\"FechaBaja\":\"\"}}"
-		response = stub.InvokeChaincode(cc_perros_cfg.CFG_ChainCodeName, cc_util.ToChaincodeArgs("ejecutarConsulta", queryString), stub.GetChannelID())
-
-		if response.Status != shim.OK {
-			return shim.Error(response.Message)
-		}
-
-		if string(response.Payload) == "[]" {
-			return shim.Error("(Args[0]) IDPerroMadre: [ " + strconv.Itoa(IDPerroMadre) + " ] no tiene propietarios")
-		}
-
-		var queryPerrosPropietarios []tipoQueryPerrosPropietarios
-
-		err = json.Unmarshal(response.Payload, &queryPerrosPropietarios)
-		if err != nil {
-			return shim.Error(err.Error())
-		}
-
-		for propietario := range queryPerrosPropietarios {
-
-			if queryPerrosPropietarios[propietario].Record.IDPersona > 0 {
-				propietariosArray = append(propietariosArray, queryPerrosPropietarios[propietario].Record.IDPersona)
-			}
-		}
-
-	}
-
-	IDPerroPadre := datosSolicitud.IDPerroPadre
-
-	if IDPerroPadre > 0 {
-
-		queryString = "{\"selector\":{\"docType\":\"" + cc_perros_cfg.CFG_ObjectType_Propietarios + "\",\"IDPerro\":" + strconv.Itoa(IDPerroPadre) + "}}"
-		response := stub.InvokeChaincode(cc_perros_cfg.CFG_ChainCodeName, cc_util.ToChaincodeArgs("ejecutarConsulta", queryString), stub.GetChannelID())
-
-		if response.Status != shim.OK {
-			return shim.Error(response.Message)
-		}
-
-		if string(response.Payload) == "[]" {
-			return shim.Error("(Args[0]) IDPerroPadre: [ " + strconv.Itoa(IDPerroPadre) + " ] no tiene propietarios")
-		}
-
-		var queryPerrosPropietarios []tipoQueryPerrosPropietarios
-
-		err = json.Unmarshal(response.Payload, &queryPerrosPropietarios)
-		if err != nil {
-			return shim.Error(err.Error())
-		}
-
-		for propietario := range queryPerrosPropietarios {
-
-			if queryPerrosPropietarios[propietario].Record.IDPersona > 0 {
-				propietariosArray = append(propietariosArray, queryPerrosPropietarios[propietario].Record.IDPersona)
-			}
-		}
-
-	}
-
-	// ---------------------------------------------------------------------------------------------------
-	// GRABAR Registros
-	// ---------------------------------------------------------------------------------------------------
-
-	var retorno bytes.Buffer
-
-	fechaHoraActual := time.Now()
-	fechaHoraActualAsString := fechaHoraActual.String()
-	fechaLimite := fechaHoraActual.Add(3 * 24 * time.Hour)
-	fechaLimiteAsString := fechaLimite.String()
-
-	// ---------------------------------------------------------------------------------------------------
-
-	var IDSolicitud int
-
-	IDSolicitudAsByte, err := stub.GetState(cc_cfg.CFG_ObjectType)
-	if err != nil {
-		return shim.Error(err.Error())
-	}
-
-	if len(IDSolicitudAsByte) <= 0 {
-		IDSolicitud = 0
-	} else {
-		IDSolicitud, err = strconv.Atoi(string(IDSolicitudAsByte))
-		if err != nil {
-			return shim.Error(err.Error())
-		}
-	}
-
-	IDSolicitud += 1
-
-	err = stub.PutState(cc_cfg.CFG_ObjectType, []byte(strconv.Itoa(IDSolicitud)))
-	if err != nil {
-		return shim.Error(err.Error())
-	}
-
-	// ---------------------------------------------------------------------------------------------------
-
-	nuevoSolicitud := &cc_cfg.Solicitudes{cc_cfg.CFG_ObjectType, IDSolicitud, tipoRegistro, args[0], IDPersonaEjecuta, fechaHoraActualAsString, fechaLimiteAsString}
-	fmt.Println(nuevoSolicitud)
-
-	nuevoSolicitudAsBytes, err := json.Marshal(nuevoSolicitud)
-	if err != nil {
-		return shim.Error(err.Error())
-	}
-
-	err = stub.PutState(cc_cfg.CFG_ObjectType+strconv.Itoa(IDSolicitud), nuevoSolicitudAsBytes)
-	if err != nil {
-		return shim.Error(err.Error())
-	}
-
-	retorno.WriteString(string(nuevoSolicitudAsBytes))
-
-	// ---------------------------------------------------------------------------------------------------
-
-	var SolicitudEstado string
-	var FechaHoraEjecucionAsString string
-	var ejecutarSolicitud bool
-
-	propietariosArray =cc_util.ArrayIntSinDuplicados(propietariosArray)
-
-	for propietario := range propietariosArray {
-
-		if IDPersonaEjecuta == propietariosArray[propietario] {
-			SolicitudEstado = cc_cfg.SolicitudEstadoAprobado
-			FechaHoraEjecucionAsString = fechaHoraActualAsString
-			if len(propietariosArray) == 1 {
-				ejecutarSolicitud = true
-			}
-
-		} else {
-			SolicitudEstado = cc_cfg.SolicitudEstadoPendiente
-			FechaHoraEjecucionAsString = ""
-		}
-
-		nuevaSolicitudAutorizacion := &cc_cfg.SolicitudesAutorizaciones{
-			cc_cfg.CFG_ObjectType_Autorizaciones,
-			IDSolicitud,
-			propietariosArray[propietario],
-			SolicitudEstado,
-			FechaHoraEjecucionAsString,
-			fechaHoraActualAsString,
-			fechaLimiteAsString}
-		// fmt.Println(nuevaSolicitudAutorizacion)
-
-		nuevaSolicitudAutorizacionAsBytes, err := json.Marshal(nuevaSolicitudAutorizacion)
-		if err != nil {
-			return shim.Error(err.Error())
-		}
-
-		err = stub.PutState(cc_cfg.CFG_ObjectType_Autorizaciones+strconv.Itoa(IDSolicitud)+"_"+strconv.Itoa(propietariosArray[propietario]), nuevaSolicitudAutorizacionAsBytes)
-		if err != nil {
-			return shim.Error(err.Error())
-		}
-
-		retorno.WriteString(string(nuevaSolicitudAutorizacionAsBytes))
-	}
-
-	if ejecutarSolicitud {
-
-		fmt.Println(ejecutarSolicitud)
-		response := stub.InvokeChaincode(cc_perros_cfg.CFG_ChainCodeName, cc_util.ToChaincodeArgs("registrarPerro", args[0], args[1]), stub.GetChannelID())
-		if response.Status != shim.OK {
-			return shim.Error(response.Message)
-		} else {
-			return shim.Success(response.Payload)
-		}
-	}
-
-	return shim.Success(retorno.Bytes())
-}
-*/
-
 func (tcc *ThisChainCode) solicitarRegistrarPerroConCertificado(stub shim.ChaincodeStubInterface, args []string, tipoRegistro string) pb.Response {
 	fmt.Println(fmt.Sprintf(" - %s --- %s()", cc_cfg.CFG_ChainCodeName, cc_util.NombreFuncion()))
 
@@ -1005,20 +713,6 @@ func (tcc *ThisChainCode) solicitarRegistrarPerroConCertificado(stub shim.Chainc
 func (tcc *ThisChainCode) solicitarRegistrarCambioPropietarioPerro(stub shim.ChaincodeStubInterface, args []string, tipoRegistro string) pb.Response {
 
 	fmt.Println(fmt.Sprintf(" - %s --- %s()", cc_cfg.CFG_ChainCodeName, cc_util.NombreFuncion()))
-
-	type tiporegistrarCambioPropietarioPropietario struct {
-		IDPersona int `json:"IDPersona"`
-	}
-
-	type tiporegistrarCambioPropietario struct {
-		IDPerro      int                                         `json:"IDPerro"`
-		Propietarios []tiporegistrarCambioPropietarioPropietario `json:"Propietarios"`
-	}
-
-	type tipoQueryPerrosPropietarios struct {
-		Key    string                           `json:"Key"`
-		Record cc_perros_cfg.PerrosPropietarios `json:"Record"`
-	}
 
 	// ---------------------------------------------------------------------------------------------------
 	// VALIDAR Argumentos
@@ -1059,7 +753,7 @@ func (tcc *ThisChainCode) solicitarRegistrarCambioPropietarioPerro(stub shim.Cha
 	// ---------------------------------------------------------------------------------------------------
 
 	DatosSolicitudComoJson := []byte(args[0])
-	var datosSolicitud tiporegistrarCambioPropietario
+	var datosSolicitud cc_perros_cfg.TipoRegistrarCambioPropietario
 	err = json.Unmarshal(DatosSolicitudComoJson, &datosSolicitud)
 	if err != nil {
 		fmt.Println(err)
@@ -1084,7 +778,7 @@ func (tcc *ThisChainCode) solicitarRegistrarCambioPropietarioPerro(stub shim.Cha
 		return shim.Error("(Args[0]) IDPerro: [ " + strconv.Itoa(IDPerro) + " ] no tiene propietarios")
 	}
 
-	var queryPerrosPropietarios []tipoQueryPerrosPropietarios
+	var queryPerrosPropietarios []cc_perros_cfg.TipoQueryPerrosPropietarios
 
 	propietariosArray := []int{}
 	err = json.Unmarshal(response.Payload, &queryPerrosPropietarios)
@@ -1101,7 +795,7 @@ func (tcc *ThisChainCode) solicitarRegistrarCambioPropietarioPerro(stub shim.Cha
 
 	// ---------------------------------------------------------------------------------------------------
 
-	var PropietariosNuevos []tiporegistrarCambioPropietarioPropietario
+	var PropietariosNuevos []cc_perros_cfg.TipoRegistrarCambioPropietarioPropietario
 
 	PropietariosNuevos = datosSolicitud.Propietarios
 	if len(PropietariosNuevos) <= 0 {
@@ -1261,242 +955,6 @@ func (tcc *ThisChainCode) solicitarRegistrarCambioPropietarioPerro(stub shim.Cha
 	return shim.Success(retorno.Bytes())
 }
 
-/*
-func (tcc *ThisChainCode) solicitarRegistrarCambioPropietarioPerro_OLD(stub shim.ChaincodeStubInterface, args []string, tipoRegistro string) pb.Response {
-
-	fmt.Println(fmt.Sprintf(" - %s --- %s()", cc_cfg.CFG_ChainCodeName, cc_util.NombreFuncion()))
-
-	type tiporegistrarCambioPropietarioPropietario struct {
-		IDPersona int `json:"IDPersona"`
-	}
-
-	type tiporegistrarCambioPropietario struct {
-		IDPerro      int                                         `json:"IDPerro"`
-		Propietarios []tiporegistrarCambioPropietarioPropietario `json:"Propietarios"`
-	}
-
-	type tipoQueryPerrosPropietarios struct {
-		Key    string                           `json:"Key"`
-		Record cc_perros_cfg.PerrosPropietarios `json:"Record"`
-	}
-
-	// ---------------------------------------------------------------------------------------------------
-	// VALIDAR Argumentos
-	// ---------------------------------------------------------------------------------------------------
-
-	if len(args) != 2 {
-		return shim.Error("Incorrecto numero de argumentos. Esperando 2")
-	}
-
-	if len(tipoRegistro) <= 0 {
-		return shim.Error("Incorrecto numero de argumentos. Esperando valor de tipoRegistro")
-	}
-
-	// ---------------------------------------------------------------------------------------------------
-
-	DatosSeguridadComoJson := []byte(args[1])
-
-	var datosSeguridad cc_util.TipoSeguridad
-
-	err := json.Unmarshal(DatosSeguridadComoJson, &datosSeguridad)
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	IDPersonaEjecuta := datosSeguridad.IDPersona
-
-	queryString := "{\"selector\":{\"docType\":\"" + cc_personas_cfg.CFG_ObjectType + "\",\"IDPersona\":" + strconv.Itoa(IDPersonaEjecuta) + "}}"
-	response := stub.InvokeChaincode(cc_personas_cfg.CFG_ChainCodeName, cc_util.ToChaincodeArgs("ejecutarConsulta", queryString), stub.GetChannelID())
-
-	if response.Status != shim.OK {
-		return shim.Error(response.Message)
-	}
-
-	if string(response.Payload) == "[]" {
-		return shim.Error("(Args[1]) IDPersona: [ " + strconv.Itoa(IDPersonaEjecuta) + " ] no existe o no es valido")
-	}
-
-	// ---------------------------------------------------------------------------------------------------
-
-	DatosSolicitudComoJson := []byte(args[0])
-	var datosSolicitud tiporegistrarCambioPropietario
-	err = json.Unmarshal(DatosSolicitudComoJson, &datosSolicitud)
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	fmt.Println(datosSolicitud)
-	fmt.Println(args[0])
-
-	IDPerro := datosSolicitud.IDPerro
-	if IDPerro <= 0 {
-		return shim.Error("(Args[0]) IDPerro: debe tener un perro")
-	}
-
-	queryString = "{\"selector\":{\"docType\":\"" + cc_perros_cfg.CFG_ObjectType_Propietarios + "\",\"IDPerro\":" + strconv.Itoa(IDPerro) + ",\"FechaBaja\":\"\"}}"
-	response = stub.InvokeChaincode(cc_perros_cfg.CFG_ChainCodeName, cc_util.ToChaincodeArgs("ejecutarConsulta", queryString), stub.GetChannelID())
-
-	if response.Status != shim.OK {
-		return shim.Error(response.Message)
-	}
-
-	if string(response.Payload) == "[]" {
-		return shim.Error("(Args[0]) IDPerro: [ " + strconv.Itoa(IDPerro) + " ] no tiene propietarios")
-	}
-
-	var queryPerrosPropietarios []tipoQueryPerrosPropietarios
-
-	propietariosArray := []int{}
-	err = json.Unmarshal(response.Payload, &queryPerrosPropietarios)
-	if err != nil {
-		return shim.Error(err.Error())
-	}
-
-	for propietario := range queryPerrosPropietarios {
-
-		if queryPerrosPropietarios[propietario].Record.IDPersona > 0 {
-			propietariosArray = append(propietariosArray, queryPerrosPropietarios[propietario].Record.IDPersona)
-		}
-	}
-
-	// ---------------------------------------------------------------------------------------------------
-
-	var PropietariosNuevos []tiporegistrarCambioPropietarioPropietario
-
-	PropietariosNuevos = datosSolicitud.Propietarios
-	if len(PropietariosNuevos) <= 0 {
-		return shim.Error("(Args[0]) Propietarios: debe tener un propietario")
-	}
-	for propietario := range PropietariosNuevos {
-
-		IDPropietarioNuevo := PropietariosNuevos[propietario].IDPersona
-
-		queryString := "{\"selector\":{\"docType\":\"" + cc_personas_cfg.CFG_ObjectType + "\",\"IDPersona\":" + strconv.Itoa(IDPropietarioNuevo) + "}}"
-		response := stub.InvokeChaincode(cc_personas_cfg.CFG_ChainCodeName, cc_util.ToChaincodeArgs("ejecutarConsulta", queryString), stub.GetChannelID())
-
-		if response.Status != shim.OK {
-			return shim.Error(response.Message)
-		}
-
-		if string(response.Payload) == "[]" {
-			return shim.Error("(Args[1]) IDPersona: [ " + strconv.Itoa(IDPropietarioNuevo) + " ] no existe o no es valido")
-		}
-
-	}
-
-	// ---------------------------------------------------------------------------------------------------
-	// GRABAR Registros
-	// ---------------------------------------------------------------------------------------------------
-
-	var retorno bytes.Buffer
-
-	fechaHoraActual := time.Now()
-	fechaHoraActualAsString := fechaHoraActual.String()
-	fechaLimite := fechaHoraActual.Add(3 * 24 * time.Hour)
-	fechaLimiteAsString := fechaLimite.String()
-
-	// ---------------------------------------------------------------------------------------------------
-
-	var IDSolicitud int
-
-	IDSolicitudAsByte, err := stub.GetState(cc_cfg.CFG_ObjectType)
-	if err != nil {
-		return shim.Error(err.Error())
-	}
-
-	if len(IDSolicitudAsByte) <= 0 {
-		IDSolicitud = 0
-	} else {
-		IDSolicitud, err = strconv.Atoi(string(IDSolicitudAsByte))
-		if err != nil {
-			return shim.Error(err.Error())
-		}
-	}
-
-	IDSolicitud += 1
-
-	err = stub.PutState(cc_cfg.CFG_ObjectType, []byte(strconv.Itoa(IDSolicitud)))
-	if err != nil {
-		return shim.Error(err.Error())
-	}
-
-	// ---------------------------------------------------------------------------------------------------
-
-	nuevoSolicitud := &cc_cfg.Solicitudes{cc_cfg.CFG_ObjectType, IDSolicitud, tipoRegistro, args[0], IDPersonaEjecuta, fechaHoraActualAsString, fechaLimiteAsString}
-	fmt.Println(nuevoSolicitud)
-
-	nuevoSolicitudAsBytes, err := json.Marshal(nuevoSolicitud)
-	if err != nil {
-		return shim.Error(err.Error())
-	}
-
-	err = stub.PutState(cc_cfg.CFG_ObjectType+strconv.Itoa(IDSolicitud), nuevoSolicitudAsBytes)
-	if err != nil {
-		return shim.Error(err.Error())
-	}
-
-	retorno.WriteString(string(nuevoSolicitudAsBytes))
-
-	// ---------------------------------------------------------------------------------------------------
-
-	var SolicitudEstado string
-	var FechaHoraEjecucionAsString string
-	var ejecutarSolicitud bool
-
-	propietariosArray =cc_util.ArrayIntSinDuplicados(propietariosArray)
-
-	for propietario := range propietariosArray {
-
-		if IDPersonaEjecuta == propietariosArray[propietario] {
-			SolicitudEstado = cc_cfg.SolicitudEstadoAprobado
-			FechaHoraEjecucionAsString = fechaHoraActualAsString
-			if len(propietariosArray) == 1 {
-				ejecutarSolicitud = true
-			}
-
-		} else {
-			SolicitudEstado = cc_cfg.SolicitudEstadoPendiente
-			FechaHoraEjecucionAsString = ""
-		}
-
-		nuevaSolicitudAutorizacion := &cc_cfg.SolicitudesAutorizaciones{
-			cc_cfg.CFG_ObjectType_Autorizaciones,
-			IDSolicitud,
-			propietariosArray[propietario],
-			SolicitudEstado,
-			FechaHoraEjecucionAsString,
-			fechaHoraActualAsString,
-			fechaLimiteAsString}
-		// fmt.Println(nuevaSolicitudAutorizacion)
-
-		nuevaSolicitudAutorizacionAsBytes, err := json.Marshal(nuevaSolicitudAutorizacion)
-		if err != nil {
-			return shim.Error(err.Error())
-		}
-
-		err = stub.PutState(cc_cfg.CFG_ObjectType_Autorizaciones+strconv.Itoa(IDSolicitud)+"_"+strconv.Itoa(propietariosArray[propietario]), nuevaSolicitudAutorizacionAsBytes)
-		if err != nil {
-			return shim.Error(err.Error())
-		}
-
-		retorno.WriteString(string(nuevaSolicitudAutorizacionAsBytes))
-	}
-
-	if ejecutarSolicitud {
-
-		fmt.Println(ejecutarSolicitud)
-		response := stub.InvokeChaincode(cc_perros_cfg.CFG_ChainCodeName, cc_util.ToChaincodeArgs("registrarCambioPropietario", args[0], args[1]), stub.GetChannelID())
-		if response.Status != shim.OK {
-			return shim.Error(response.Message)
-		} else {
-			return shim.Success(response.Payload)
-		}
-	}
-
-	return shim.Success(retorno.Bytes())
-}
-*/
-
 func (tcc *ThisChainCode) querySolicitudes(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
 	type tipoFiltroQuerySolicitudes struct {
@@ -1504,7 +962,7 @@ func (tcc *ThisChainCode) querySolicitudes(stub shim.ChaincodeStubInterface, arg
 		EstadoSolicitud string `json:"EstadoSolicitud"`
 	}
 
-	fmt.Println("- SolicitudesChaincode --- querySolicitudes()")
+	fmt.Println(fmt.Sprintf(" - %s --- %s()", cc_cfg.CFG_ChainCodeName, cc_util.NombreFuncion()))
 
 	// ---------------------------------------------------------------------------------------------------
 	// VALIDAR Argumentos
@@ -1598,20 +1056,6 @@ func (tcc *ThisChainCode) solicitarRegistrarCambioPropietarioAfijo(stub shim.Cha
 
 	fmt.Println(fmt.Sprintf(" - %s --- %s()", cc_cfg.CFG_ChainCodeName, cc_util.NombreFuncion()))
 
-	type tiporegistrarCambioPropietarioPropietario struct {
-		IDPersona int `json:"IDPersona"`
-	}
-
-	type tiporegistrarCambioPropietario struct {
-		IDAfijo      int                                         `json:"IDAfijo"`
-		Propietarios []tiporegistrarCambioPropietarioPropietario `json:"Propietarios"`
-	}
-
-	type tipoQueryAfijosPropietarios struct {
-		Key    string                           `json:"Key"`
-		Record cc_afijos_cfg.AfijosPropietarios `json:"Record"`
-	}
-
 	// ---------------------------------------------------------------------------------------------------
 	// VALIDAR Argumentos
 	// ---------------------------------------------------------------------------------------------------
@@ -1651,7 +1095,7 @@ func (tcc *ThisChainCode) solicitarRegistrarCambioPropietarioAfijo(stub shim.Cha
 	// ---------------------------------------------------------------------------------------------------
 
 	DatosSolicitudComoJson := []byte(args[0])
-	var datosSolicitud tiporegistrarCambioPropietario
+	var datosSolicitud cc_afijos_cfg.TipoRegistrarCambioPropietario
 	err = json.Unmarshal(DatosSolicitudComoJson, &datosSolicitud)
 	if err != nil {
 		fmt.Println(err)
@@ -1676,7 +1120,7 @@ func (tcc *ThisChainCode) solicitarRegistrarCambioPropietarioAfijo(stub shim.Cha
 		return shim.Error("(Args[0]) IDAfijo: [ " + strconv.Itoa(IDAfijo) + " ] no tiene propietarios")
 	}
 
-	var queryAfijosPropietarios []tipoQueryAfijosPropietarios
+	var queryAfijosPropietarios []cc_afijos_cfg.TipoQueryAfijosPropietarios
 
 	propietariosArray := []int{}
 	err = json.Unmarshal(response.Payload, &queryAfijosPropietarios)
@@ -1693,7 +1137,7 @@ func (tcc *ThisChainCode) solicitarRegistrarCambioPropietarioAfijo(stub shim.Cha
 
 	// ---------------------------------------------------------------------------------------------------
 
-	var PropietariosNuevos []tiporegistrarCambioPropietarioPropietario
+	var PropietariosNuevos []cc_afijos_cfg.TipoRegistrarCambioPropietarioPropietario
 
 	PropietariosNuevos = datosSolicitud.Propietarios
 	if len(PropietariosNuevos) <= 0 {
@@ -1865,280 +1309,11 @@ func (tcc *ThisChainCode) solicitarRegistrarCambioPropietarioAfijo(stub shim.Cha
 
 	return shim.Success(retorno.Bytes())
 }
-
-/*
-func (tcc *ThisChainCode) solicitarRegistrarCambioPropietarioAfijo_OLD(stub shim.ChaincodeStubInterface, args []string, tipoRegistro string) pb.Response {
-
-	fmt.Println(fmt.Sprintf(" - %s --- %s()", cc_cfg.CFG_ChainCodeName, cc_util.NombreFuncion()))
-
-	type tiporegistrarCambioPropietarioPropietario struct {
-		IDPersona int `json:"IDPersona"`
-	}
-
-	type tiporegistrarCambioPropietario struct {
-		IDAfijo      int                                         `json:"IDAfijo"`
-		Propietarios []tiporegistrarCambioPropietarioPropietario `json:"Propietarios"`
-	}
-
-	type tipoQueryAfijosPropietarios struct {
-		Key    string                           `json:"Key"`
-		Record cc_afijos_cfg.AfijosPropietarios `json:"Record"`
-	}
-
-	// ---------------------------------------------------------------------------------------------------
-	// VALIDAR Argumentos
-	// ---------------------------------------------------------------------------------------------------
-
-	if len(args) != 2 {
-		return shim.Error("Incorrecto numero de argumentos. Esperando 2")
-	}
-
-	if len(tipoRegistro) <= 0 {
-		return shim.Error("Incorrecto numero de argumentos. Esperando valor de tipoRegistro")
-	}
-
-	// ---------------------------------------------------------------------------------------------------
-
-	DatosSeguridadComoJson := []byte(args[1])
-
-	var datosSeguridad cc_util.TipoSeguridad
-
-	err := json.Unmarshal(DatosSeguridadComoJson, &datosSeguridad)
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	IDPersonaEjecuta := datosSeguridad.IDPersona
-
-	queryString := "{\"selector\":{\"docType\":\"" + cc_personas_cfg.CFG_ObjectType + "\",\"IDPersona\":" + strconv.Itoa(IDPersonaEjecuta) + "}}"
-	response := stub.InvokeChaincode(cc_personas_cfg.CFG_ChainCodeName, cc_util.ToChaincodeArgs("ejecutarConsulta", queryString), stub.GetChannelID())
-
-	if response.Status != shim.OK {
-		return shim.Error(response.Message)
-	}
-
-	if string(response.Payload) == "[]" {
-		return shim.Error("(Args[1]) IDPersona: [ " + strconv.Itoa(IDPersonaEjecuta) + " ] no existe o no es valido")
-	}
-
-	// ---------------------------------------------------------------------------------------------------
-
-	DatosSolicitudComoJson := []byte(args[0])
-	var datosSolicitud tiporegistrarCambioPropietario
-	err = json.Unmarshal(DatosSolicitudComoJson, &datosSolicitud)
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	fmt.Println(datosSolicitud)
-	fmt.Println(args[0])
-
-	IDAfijo := datosSolicitud.IDAfijo
-	if IDAfijo <= 0 {
-		return shim.Error("(Args[0]) IDAfijo: debe tener un Afijo")
-	}
-
-	queryString = "{\"selector\":{\"docType\":\"" + cc_afijos_cfg.CFG_ObjectType_Propietarios + "\",\"IDAfijo\":" + strconv.Itoa(IDAfijo) + ",\"FechaBaja\":\"\"}}"
-	response = stub.InvokeChaincode(cc_afijos_cfg.CFG_ChainCodeName, cc_util.ToChaincodeArgs("ejecutarConsulta", queryString), stub.GetChannelID())
-
-	if response.Status != shim.OK {
-		return shim.Error(response.Message)
-	}
-
-	if string(response.Payload) == "[]" {
-		return shim.Error("(Args[0]) IDAfijo: [ " + strconv.Itoa(IDAfijo) + " ] no tiene propietarios")
-	}
-
-	var queryAfijosPropietarios []tipoQueryAfijosPropietarios
-
-	propietariosArray := []int{}
-	err = json.Unmarshal(response.Payload, &queryAfijosPropietarios)
-	if err != nil {
-		return shim.Error(err.Error())
-	}
-
-	for propietario := range queryAfijosPropietarios {
-
-		if queryAfijosPropietarios[propietario].Record.IDPersona > 0 {
-			propietariosArray = append(propietariosArray, queryAfijosPropietarios[propietario].Record.IDPersona)
-		}
-	}
-
-	// ---------------------------------------------------------------------------------------------------
-
-	var PropietariosNuevos []tiporegistrarCambioPropietarioPropietario
-
-	PropietariosNuevos = datosSolicitud.Propietarios
-	if len(PropietariosNuevos) <= 0 {
-		return shim.Error("(Args[0]) Propietarios: debe tener un propietario")
-	}
-	for propietario := range PropietariosNuevos {
-
-		IDPropietarioNuevo := PropietariosNuevos[propietario].IDPersona
-
-		queryString := "{\"selector\":{\"docType\":\"" + cc_personas_cfg.CFG_ObjectType + "\",\"IDPersona\":" + strconv.Itoa(IDPropietarioNuevo) + "}}"
-		response := stub.InvokeChaincode(cc_personas_cfg.CFG_ChainCodeName, cc_util.ToChaincodeArgs("ejecutarConsulta", queryString), stub.GetChannelID())
-
-		if response.Status != shim.OK {
-			return shim.Error(response.Message)
-		}
-
-		if string(response.Payload) == "[]" {
-			return shim.Error("(Args[1]) IDPersona: [ " + strconv.Itoa(IDPropietarioNuevo) + " ] no existe o no es valido")
-		}
-
-		// ---------------------------------------------------------------------------------------------------
-
-		queryString = "{\"selector\":{\"docType\":\"" + cc_afijos_cfg.CFG_ObjectType_Propietarios + "\",\"IDPersona\":" + strconv.Itoa(IDPropietarioNuevo) + ",\"FechaBaja\":\"\"}}"
-		response = stub.InvokeChaincode(cc_afijos_cfg.CFG_ChainCodeName, cc_util.ToChaincodeArgs("ejecutarConsulta", queryString), stub.GetChannelID())
-
-		if response.Status != shim.OK {
-			return shim.Error(response.Message)
-		}
-
-		if string(response.Payload) != "[]" {
-			return shim.Error("(Args[0, " + strconv.Itoa(propietario) + "]) IDPersona: [ " + strconv.Itoa(IDPropietarioNuevo) + " ] tiene asignado un afijo activo " + string(response.Payload))
-		}
-
-	}
-
-	// ---------------------------------------------------------------------------------------------------
-	// GRABAR Registros
-	// ---------------------------------------------------------------------------------------------------
-
-	var retorno bytes.Buffer
-
-	fechaHoraActual := time.Now()
-	fechaHoraActualAsString := fechaHoraActual.String()
-	fechaLimite := fechaHoraActual.Add(3 * 24 * time.Hour)
-	fechaLimiteAsString := fechaLimite.String()
-
-	// ---------------------------------------------------------------------------------------------------
-
-	IDSolicitud := 0
-
-	infoChainCodeAsBytes, err := stub.GetState(cc_cfg.CFG_ObjectType)
-
-	if err != nil {
-		return shim.Error(err.Error())
-	}
-
-	if len(infoChainCodeAsBytes) > 0 {
-
-		var queryInfoChaincode cc_util.InfoChaincode
-		err = json.Unmarshal(infoChainCodeAsBytes, &queryInfoChaincode)
-		if err != nil {
-			fmt.Println(err)
-		}
-		IDSolicitud = queryInfoChaincode.IDMaximo
-	}
-
-	IDSolicitud += 1
-
-	// ---------------------------------------------------------------------------------------------------
-
-	InfoChaincodeAsBytes, err := json.Marshal(&cc_util.InfoChaincode{cc_util.CC_INFO_CONTADOR, IDSolicitud})
-	if err != nil {
-		return shim.Error(err.Error())
-	}
-
-	fmt.Println([]string{cc_cfg.CFG_ObjectType, string(InfoChaincodeAsBytes)})
-
-	err = stub.PutState(cc_cfg.CFG_ObjectType, InfoChaincodeAsBytes)
-	if err != nil {
-		return shim.Error(err.Error())
-	}
-
-	// ---------------------------------------------------------------------------------------------------
-
-	nuevoSolicitud := &cc_cfg.Solicitudes{cc_cfg.CFG_ObjectType, IDSolicitud, tipoRegistro, args[0], IDPersonaEjecuta, fechaHoraActualAsString, fechaLimiteAsString}
-	fmt.Println(nuevoSolicitud)
-
-	nuevoSolicitudAsBytes, err := json.Marshal(nuevoSolicitud)
-	if err != nil {
-		return shim.Error(err.Error())
-	}
-
-	err = stub.PutState(cc_cfg.CFG_ObjectType+strconv.Itoa(IDSolicitud), nuevoSolicitudAsBytes)
-	if err != nil {
-		return shim.Error(err.Error())
-	}
-
-	retorno.WriteString(string(nuevoSolicitudAsBytes))
-
-	// ---------------------------------------------------------------------------------------------------
-
-	var SolicitudEstado string
-	var FechaHoraEjecucionAsString string
-	var ejecutarSolicitud bool
-
-	propietariosArray =cc_util.ArrayIntSinDuplicados(propietariosArray)
-
-	for propietario := range propietariosArray {
-
-		if IDPersonaEjecuta == propietariosArray[propietario] {
-			SolicitudEstado = cc_cfg.SolicitudEstadoAprobado
-			FechaHoraEjecucionAsString = fechaHoraActualAsString
-			if len(propietariosArray) == 1 {
-				ejecutarSolicitud = true
-			}
-
-		} else {
-			SolicitudEstado = cc_cfg.SolicitudEstadoPendiente
-			FechaHoraEjecucionAsString = ""
-		}
-
-		nuevaSolicitudAutorizacion := &cc_cfg.SolicitudesAutorizaciones{
-			cc_cfg.CFG_ObjectType_Autorizaciones,
-			IDSolicitud,
-			propietariosArray[propietario],
-			SolicitudEstado,
-			FechaHoraEjecucionAsString,
-			fechaHoraActualAsString,
-			fechaLimiteAsString}
-		// fmt.Println(nuevaSolicitudAutorizacion)
-
-		nuevaSolicitudAutorizacionAsBytes, err := json.Marshal(nuevaSolicitudAutorizacion)
-		if err != nil {
-			return shim.Error(err.Error())
-		}
-
-		err = stub.PutState(cc_cfg.CFG_ObjectType_Autorizaciones+strconv.Itoa(IDSolicitud)+"_"+strconv.Itoa(propietariosArray[propietario]), nuevaSolicitudAutorizacionAsBytes)
-		if err != nil {
-			return shim.Error(err.Error())
-		}
-
-		retorno.WriteString(string(nuevaSolicitudAutorizacionAsBytes))
-	}
-
-	if ejecutarSolicitud {
-
-		fmt.Println(ejecutarSolicitud)
-		response := stub.InvokeChaincode(cc_afijos_cfg.CFG_ChainCodeName, cc_util.ToChaincodeArgs("registrarCambioPropietario", args[0], args[1]), stub.GetChannelID())
-		if response.Status != shim.OK {
-			return shim.Error(response.Message)
-		} else {
-			return shim.Success(response.Payload)
-		}
-	}
-
-	return shim.Success(retorno.Bytes())
-}
-*/
 
 func (tcc *ThisChainCode) solicitarRegistrarCancelacionAfijo(stub shim.ChaincodeStubInterface, args []string, tipoRegistro string) pb.Response {
 
 	fmt.Println(fmt.Sprintf(" - %s --- %s()", cc_cfg.CFG_ChainCodeName, cc_util.NombreFuncion()))
 
-	type tiporegistrarCancelacion struct {
-		IDAfijo int `json:"IDAfijo"`
-	}
-
-	type tipoQueryAfijosPropietarios struct {
-		Key    string                           `json:"Key"`
-		Record cc_afijos_cfg.AfijosPropietarios `json:"Record"`
-	}
-
 	// ---------------------------------------------------------------------------------------------------
 	// VALIDAR Argumentos
 	// ---------------------------------------------------------------------------------------------------
@@ -2178,7 +1353,7 @@ func (tcc *ThisChainCode) solicitarRegistrarCancelacionAfijo(stub shim.Chaincode
 	// ---------------------------------------------------------------------------------------------------
 
 	DatosSolicitudComoJson := []byte(args[0])
-	var datosSolicitud tiporegistrarCancelacion
+	var datosSolicitud cc_afijos_cfg.TipoRegistrarCancelacionAfijo
 	err = json.Unmarshal(DatosSolicitudComoJson, &datosSolicitud)
 	if err != nil {
 		fmt.Println(err)
@@ -2203,7 +1378,7 @@ func (tcc *ThisChainCode) solicitarRegistrarCancelacionAfijo(stub shim.Chaincode
 		return shim.Error("(Args[0]) IDAfijo: [ " + strconv.Itoa(IDAfijo) + " ] no tiene propietarios")
 	}
 
-	var queryAfijosPropietarios []tipoQueryAfijosPropietarios
+	var queryAfijosPropietarios []cc_afijos_cfg.TipoQueryAfijosPropietarios
 
 	propietariosArray := []int{}
 	err = json.Unmarshal(response.Payload, &queryAfijosPropietarios)
@@ -2354,223 +1529,6 @@ func (tcc *ThisChainCode) solicitarRegistrarCancelacionAfijo(stub shim.Chaincode
 
 	return shim.Success(retorno.Bytes())
 }
-
-/*
-func (tcc *ThisChainCode) solicitarRegistrarCancelacionAfijo_OLD(stub shim.ChaincodeStubInterface, args []string, tipoRegistro string) pb.Response {
-
-	fmt.Println(fmt.Sprintf(" - %s --- %s()", cc_cfg.CFG_ChainCodeName, cc_util.NombreFuncion()))
-
-	type tiporegistrarCancelacion struct {
-		IDAfijo int `json:"IDAfijo"`
-	}
-
-	type tipoQueryAfijosPropietarios struct {
-		Key    string                           `json:"Key"`
-		Record cc_afijos_cfg.AfijosPropietarios `json:"Record"`
-	}
-
-	// ---------------------------------------------------------------------------------------------------
-	// VALIDAR Argumentos
-	// ---------------------------------------------------------------------------------------------------
-
-	if len(args) != 2 {
-		return shim.Error("Incorrecto numero de argumentos. Esperando 2")
-	}
-
-	if len(tipoRegistro) <= 0 {
-		return shim.Error("Incorrecto numero de argumentos. Esperando valor de tipoRegistro")
-	}
-
-	// ---------------------------------------------------------------------------------------------------
-
-	DatosSeguridadComoJson := []byte(args[1])
-
-	var datosSeguridad cc_util.TipoSeguridad
-
-	err := json.Unmarshal(DatosSeguridadComoJson, &datosSeguridad)
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	IDPersonaEjecuta := datosSeguridad.IDPersona
-
-	queryString := "{\"selector\":{\"docType\":\"" + cc_personas_cfg.CFG_ObjectType + "\",\"IDPersona\":" + strconv.Itoa(IDPersonaEjecuta) + "}}"
-	response := stub.InvokeChaincode(cc_personas_cfg.CFG_ChainCodeName, cc_util.ToChaincodeArgs("ejecutarConsulta", queryString), stub.GetChannelID())
-
-	if response.Status != shim.OK {
-		return shim.Error(response.Message)
-	}
-
-	if string(response.Payload) == "[]" {
-		return shim.Error("(Args[1]) IDPersona: [ " + strconv.Itoa(IDPersonaEjecuta) + " ] no existe o no es valido")
-	}
-
-	// ---------------------------------------------------------------------------------------------------
-
-	DatosSolicitudComoJson := []byte(args[0])
-	var datosSolicitud tiporegistrarCancelacion
-	err = json.Unmarshal(DatosSolicitudComoJson, &datosSolicitud)
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	fmt.Println(datosSolicitud)
-	fmt.Println(args[0])
-
-	IDAfijo := datosSolicitud.IDAfijo
-	if IDAfijo <= 0 {
-		return shim.Error("(Args[0]) IDAfijo: debe tener un Afijo")
-	}
-
-	queryString = "{\"selector\":{\"docType\":\"" + cc_afijos_cfg.CFG_ObjectType_Propietarios + "\",\"IDAfijo\":" + strconv.Itoa(IDAfijo) + ",\"FechaBaja\":\"\"}}"
-	response = stub.InvokeChaincode(cc_afijos_cfg.CFG_ChainCodeName, cc_util.ToChaincodeArgs("ejecutarConsulta", queryString), stub.GetChannelID())
-
-	if response.Status != shim.OK {
-		return shim.Error(response.Message)
-	}
-
-	if string(response.Payload) == "[]" {
-		return shim.Error("(Args[0]) IDAfijo: [ " + strconv.Itoa(IDAfijo) + " ] no tiene propietarios")
-	}
-
-	var queryAfijosPropietarios []tipoQueryAfijosPropietarios
-
-	propietariosArray := []int{}
-	err = json.Unmarshal(response.Payload, &queryAfijosPropietarios)
-	if err != nil {
-		return shim.Error(err.Error())
-	}
-
-	for propietario := range queryAfijosPropietarios {
-
-		if queryAfijosPropietarios[propietario].Record.IDPersona > 0 {
-			propietariosArray = append(propietariosArray, queryAfijosPropietarios[propietario].Record.IDPersona)
-		}
-	}
-
-	// ---------------------------------------------------------------------------------------------------
-	// GRABAR Registros
-	// ---------------------------------------------------------------------------------------------------
-
-	var retorno bytes.Buffer
-
-	fechaHoraActual := time.Now()
-	fechaHoraActualAsString := fechaHoraActual.String()
-	fechaLimite := fechaHoraActual.Add(3 * 24 * time.Hour)
-	fechaLimiteAsString := fechaLimite.String()
-
-	// ---------------------------------------------------------------------------------------------------
-
-	IDSolicitud := 0
-
-	infoChainCodeAsBytes, err := stub.GetState(cc_cfg.CFG_ObjectType)
-
-	if err != nil {
-		return shim.Error(err.Error())
-	}
-
-	if len(infoChainCodeAsBytes) > 0 {
-
-		var queryInfoChaincode cc_util.InfoChaincode
-		err = json.Unmarshal(infoChainCodeAsBytes, &queryInfoChaincode)
-		if err != nil {
-			fmt.Println(err)
-		}
-		IDSolicitud = queryInfoChaincode.IDMaximo
-	}
-
-	IDSolicitud += 1
-
-	// ---------------------------------------------------------------------------------------------------
-
-	InfoChaincodeAsBytes, err := json.Marshal(&cc_util.InfoChaincode{cc_util.CC_INFO_CONTADOR, IDSolicitud})
-	if err != nil {
-		return shim.Error(err.Error())
-	}
-
-	fmt.Println([]string{cc_cfg.CFG_ObjectType, string(InfoChaincodeAsBytes)})
-
-	err = stub.PutState(cc_cfg.CFG_ObjectType, InfoChaincodeAsBytes)
-	if err != nil {
-		return shim.Error(err.Error())
-	}
-
-	// ---------------------------------------------------------------------------------------------------
-
-	nuevoSolicitud := &cc_cfg.Solicitudes{cc_cfg.CFG_ObjectType, IDSolicitud, tipoRegistro, args[0], IDPersonaEjecuta, fechaHoraActualAsString, fechaLimiteAsString}
-	fmt.Println(nuevoSolicitud)
-
-	nuevoSolicitudAsBytes, err := json.Marshal(nuevoSolicitud)
-	if err != nil {
-		return shim.Error(err.Error())
-	}
-
-	err = stub.PutState(cc_cfg.CFG_ObjectType+strconv.Itoa(IDSolicitud), nuevoSolicitudAsBytes)
-	if err != nil {
-		return shim.Error(err.Error())
-	}
-
-	retorno.WriteString(string(nuevoSolicitudAsBytes))
-
-	// ---------------------------------------------------------------------------------------------------
-
-	var SolicitudEstado string
-	var FechaHoraEjecucionAsString string
-	var ejecutarSolicitud bool
-
-	propietariosArray =cc_util.ArrayIntSinDuplicados(propietariosArray)
-
-	for propietario := range propietariosArray {
-
-		if IDPersonaEjecuta == propietariosArray[propietario] {
-			SolicitudEstado = cc_cfg.SolicitudEstadoAprobado
-			FechaHoraEjecucionAsString = fechaHoraActualAsString
-			if len(propietariosArray) == 1 {
-				ejecutarSolicitud = true
-			}
-
-		} else {
-			SolicitudEstado = cc_cfg.SolicitudEstadoPendiente
-			FechaHoraEjecucionAsString = ""
-		}
-
-		nuevaSolicitudAutorizacion := &cc_cfg.SolicitudesAutorizaciones{
-			cc_cfg.CFG_ObjectType_Autorizaciones,
-			IDSolicitud,
-			propietariosArray[propietario],
-			SolicitudEstado,
-			FechaHoraEjecucionAsString,
-			fechaHoraActualAsString,
-			fechaLimiteAsString}
-		// fmt.Println(nuevaSolicitudAutorizacion)
-
-		nuevaSolicitudAutorizacionAsBytes, err := json.Marshal(nuevaSolicitudAutorizacion)
-		if err != nil {
-			return shim.Error(err.Error())
-		}
-
-		err = stub.PutState(cc_cfg.CFG_ObjectType_Autorizaciones+strconv.Itoa(IDSolicitud)+"_"+strconv.Itoa(propietariosArray[propietario]), nuevaSolicitudAutorizacionAsBytes)
-		if err != nil {
-			return shim.Error(err.Error())
-		}
-
-		retorno.WriteString(string(nuevaSolicitudAutorizacionAsBytes))
-	}
-
-	if ejecutarSolicitud {
-
-		fmt.Println(ejecutarSolicitud)
-		response := stub.InvokeChaincode(cc_afijos_cfg.CFG_ChainCodeName, cc_util.ToChaincodeArgs("registrarCancelacionAfijo", args[0], args[1]), stub.GetChannelID())
-		if response.Status != shim.OK {
-			return shim.Error(response.Message)
-		} else {
-			return shim.Success(response.Payload)
-		}
-	}
-
-	return shim.Success(retorno.Bytes())
-}
-*/
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // FUNCIONES COMUNES
