@@ -16,7 +16,7 @@ echo "********************"
 echo "Configurando el servidor ColegiosVeterianrios"
 echo "********************"
 
-ssh hyperledger@82.223.101.251 bash -c "'
+ssh root@82.223.101.251 bash -c "'
 
 clear
 
