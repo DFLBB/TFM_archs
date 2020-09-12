@@ -23,7 +23,7 @@ export CA_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/orderer
 export ORDENER_URL=orderer.netcan.com:7050
 export CC_VERSION=1.0.0
 
-LISTACHAINCODES=`ls /opt/gopath/src/github.com/chaincode`
+LISTACHAINCODES=`ls /opt/gopath/src/github.com/chaincode/netcan`
 for CHAINCODE in $LISTACHAINCODES; do
     if [ "$CHAINCODE" != "netcan" ]; then
 
