@@ -17,7 +17,7 @@ echo "Configurando el servidor ColegiosVeterianrios"
 echo "********************"
 
 ssh root@82.223.101.251 bash -c "'
-
+cd /home/hyperledger/work/src/fabric-samples/TFM/scripts/
 clear
 
 echo "**************************************************************************"
