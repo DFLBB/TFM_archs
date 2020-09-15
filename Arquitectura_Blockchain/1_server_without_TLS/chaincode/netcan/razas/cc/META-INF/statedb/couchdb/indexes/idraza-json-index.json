@@ -1,0 +1,5 @@
+{
+   "index": {"fields": [ "docType", "IDRaza", "FechaBaja" ]},
+   "name": "idraza-json-index",
+   "type": "json"
+}

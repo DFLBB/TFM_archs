@@ -1,0 +1,9 @@
+{
+	"network-configs": {
+		"netcan": {
+			"name": "netcan",
+			"profile": "./connection-profile/netcan_15.json"
+		}
+	},
+	"license": "Apache-2.0"
+}

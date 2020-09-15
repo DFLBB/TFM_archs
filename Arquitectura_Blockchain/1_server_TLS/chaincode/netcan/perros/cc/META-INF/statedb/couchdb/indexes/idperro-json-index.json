@@ -1,0 +1,5 @@
+{
+   "index": {"fields": [ "docTYpe", "IDPerro" ]},
+   "name": "idperro-json-index",
+   "type": "json"
+}

@@ -1,0 +1,57 @@
+# Copyright IBM Corp. All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+# ---------------------------------------------------------------------------
+# "OrdererOrgs" - Definition of organizations managing orderer nodes
+# ---------------------------------------------------------------------------
+OrdererOrgs:
+
+  - Name: Orderer
+    Domain: netcan.com
+
+    Specs:
+      - Hostname: orderer
+
+PeerOrgs:
+
+  - Name: Federaciones
+    Domain: federaciones.netcan.com
+    EnableNodeOUs: true
+
+    Specs:
+      - Hostname: FCI
+      - Hostname: RSCE
+      - Hostname: TKC
+      - Hostname: ACW
+
+    Users:
+      Count: 1
+
+  - Name: ColegiosVeterinarios
+    Domain: colegiosveterinarios.netcan.com
+    EnableNodeOUs: true
+    Specs:
+      - Hostname: CVMadrid
+      - Hostname: CVAndalucia
+      - Hostname: CVAragon
+      - Hostname: CVAsturias
+      - Hostname: CVIllesBalears
+      - Hostname: CVCanarias
+      - Hostname: CVCantabria
+      - Hostname: CVCastillayLeon
+      - Hostname: CVCastillalaMancha
+      - Hostname: CVCataluna
+      - Hostname: CVComunitatValenciana
+      - Hostname: CVExtremadura
+      - Hostname: CVGalicia
+      - Hostname: CVMurcia
+      - Hostname: CVNavarra
+      - Hostname: CVPaisVasco
+      - Hostname: CVLaRioja
+      - Hostname: CVCeuta
+      - Hostname: CVMelilla
+
+    Users:
+      Count: 1

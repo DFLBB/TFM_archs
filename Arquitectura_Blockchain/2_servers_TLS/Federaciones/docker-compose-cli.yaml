@@ -1,0 +1,111 @@
+# Copyright IBM Corp. All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+version: '2'
+
+volumes:
+  orderer.netcan.com:
+  FCI.federaciones.netcan.com:
+  RSCE.federaciones.netcan.com:
+  TKC.federaciones.netcan.com:
+  ACW.federaciones.netcan.com:
+
+networks:
+  default:
+    external:
+      name: netcan
+
+services:
+
+  ca.federaciones:
+    image: hyperledger/fabric-ca:1.4.0
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca-federaciones
+      - FABRIC_CA_SERVER_TLS_ENABLED=false
+      - FABRIC_CA_SERVER_PORT=7054
+    ports:
+      - "7054:7054"
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.federaciones.netcan.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/876ab47bd6ac9132e57aa5e92828193fc70dc51522c932666e5e757a31b65de0_sk -b admin:adminpw -d --cfg.identities.allowremove'
+    volumes:
+      - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
+      - /home/hyperledger/work/src/fabric-samples/TFM/crypto-config/peerOrganizations/federaciones.netcan.com/ca/:/etc/hyperledger/fabric-ca-server-config
+    container_name: ca_federaciones
+    networks:
+      - default
+
+  orderer.netcan.com:
+    extends:
+      file:   base/docker-compose-base.yaml
+      service: orderer.netcan.com
+    container_name: orderer.netcan.com
+    networks:
+      - default
+
+  FCI.federaciones.netcan.com:
+    container_name: FCI.federaciones.netcan.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: FCI.federaciones.netcan.com
+    networks:
+      - default
+
+  RSCE.federaciones.netcan.com:
+    container_name: RSCE.federaciones.netcan.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: RSCE.federaciones.netcan.com
+    networks:
+      - default
+
+  TKC.federaciones.netcan.com:
+    container_name: TKC.federaciones.netcan.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: TKC.federaciones.netcan.com
+    networks:
+      - default
+
+  ACW.federaciones.netcan.com:
+    container_name: ACW.federaciones.netcan.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: ACW.federaciones.netcan.com
+    networks:
+      - default
+
+  cli:
+    container_name: cli
+    image: hyperledger/fabric-tools:1.4.0
+    tty: true
+    stdin_open: true
+    environment:
+      - GOPATH=/opt/gopath
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - FABRIC_LOGGING_SPEC=INFO
+      - CORE_PEER_ID=cli
+      - CORE_PEER_ADDRESS=FCI.federaciones.netcan.com:7051
+      - CORE_PEER_LOCALMSPID=FederacionesMSP
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/federaciones.netcan.com/peers/FCI.federaciones.netcan.com/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/federaciones.netcan.com/peers/FCI.federaciones.netcan.com/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/federaciones.netcan.com/peers/FCI.federaciones.netcan.com/tls/ca.crt
+      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/federaciones.netcan.com/users/Admin@federaciones.netcan.com/msp
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: /bin/bash
+    volumes:
+        - /var/run/:/host/var/run/
+        - /home/hyperledger/work/src/fabric-samples/TFM/chaincode/:/opt/gopath/src/github.com/chaincode
+        - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
+        - ./scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
+        - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
+    depends_on:
+      - orderer.netcan.com
+      - FCI.federaciones.netcan.com
+      - RSCE.federaciones.netcan.com
+      - TKC.federaciones.netcan.com
+      - ACW.federaciones.netcan.com
+    networks:
+      - default

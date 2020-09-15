@@ -1,0 +1,5 @@
+{
+   "index": {"fields": [ "docType", "Nombre" ]},
+   "name": "nombre-json-index",
+   "type": "json"
+}

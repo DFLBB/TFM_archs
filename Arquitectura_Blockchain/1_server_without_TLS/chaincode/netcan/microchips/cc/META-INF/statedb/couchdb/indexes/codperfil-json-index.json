@@ -1,0 +1,5 @@
+{
+   "index": {"fields": [ "docTYpe", "CODPerfil" ]},
+   "name": "codperfil-json-index",
+   "type": "json"
+}

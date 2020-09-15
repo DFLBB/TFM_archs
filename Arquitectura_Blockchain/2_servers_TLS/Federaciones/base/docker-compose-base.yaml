@@ -1,0 +1,114 @@
+# Copyright IBM Corp. All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+version: '2'
+
+services:
+
+  orderer.netcan.com:
+    container_name: orderer.netcan.com
+    image: hyperledger/fabric-orderer:1.4.0 
+    environment:
+      - ORDERER_GENERAL_LOGLEVEL=INFO
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_GENESISMETHOD=file
+      - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.genesis.block
+      - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      # enabled TLS
+      - ORDERER_GENERAL_TLS_ENABLED=true
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=tfm_netcan
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: orderer
+    volumes:
+    - ../channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+    - ../crypto-config/ordererOrganizations/netcan.com/orderers/orderer.netcan.com/msp:/var/hyperledger/orderer/msp
+    - ../crypto-config/ordererOrganizations/netcan.com/orderers/orderer.netcan.com/tls/:/var/hyperledger/orderer/tls
+    - orderer.netcan.com:/var/hyperledger/production/orderer
+    ports:
+      - 7050:7050
+
+  FCI.federaciones.netcan.com:
+    container_name: FCI.federaciones.netcan.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=FCI.federaciones.netcan.com
+      - CORE_PEER_ADDRESS=FCI.federaciones.netcan.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=RSCE.federaciones.netcan.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=FCI.federaciones.netcan.com:7051
+      - CORE_PEER_LOCALMSPID=FederacionesMSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/federaciones.netcan.com/peers/FCI.federaciones.netcan.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/federaciones.netcan.com/peers/FCI.federaciones.netcan.com/tls:/etc/hyperledger/fabric/tls
+        - FCI.federaciones.netcan.com:/var/hyperledger/production
+    ports:
+      - 7051:7051
+      - 7053:7053
+
+  RSCE.federaciones.netcan.com:
+    container_name: RSCE.federaciones.netcan.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=RSCE.federaciones.netcan.com
+      - CORE_PEER_ADDRESS=RSCE.federaciones.netcan.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=RSCE.federaciones.netcan.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=FCI.federaciones.netcan.com:7051
+      - CORE_PEER_LOCALMSPID=FederacionesMSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/federaciones.netcan.com/peers/RSCE.federaciones.netcan.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/federaciones.netcan.com/peers/RSCE.federaciones.netcan.com/tls:/etc/hyperledger/fabric/tls
+        - RSCE.federaciones.netcan.com:/var/hyperledger/production
+    ports:
+      - 8051:7051
+      - 8053:7053
+
+  TKC.federaciones.netcan.com:
+    container_name: TKC.federaciones.netcan.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=TKC.federaciones.netcan.com
+      - CORE_PEER_ADDRESS=TKC.federaciones.netcan.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=TKC.federaciones.netcan.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=FCI.federaciones.netcan.com:7051
+      - CORE_PEER_LOCALMSPID=FederacionesMSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/federaciones.netcan.com/peers/TKC.federaciones.netcan.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/federaciones.netcan.com/peers/TKC.federaciones.netcan.com/tls:/etc/hyperledger/fabric/tls
+        - TKC.federaciones.netcan.com:/var/hyperledger/production
+    ports:
+      - 9051:7051
+      - 9053:7053
+
+  ACW.federaciones.netcan.com:
+    container_name: ACW.federaciones.netcan.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=ACW.federaciones.netcan.com
+      - CORE_PEER_ADDRESS=ACW.federaciones.netcan.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=ACW.federaciones.netcan.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=FCI.federaciones.netcan.com:7051
+      - CORE_PEER_LOCALMSPID=FederacionesMSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/federaciones.netcan.com/peers/ACW.federaciones.netcan.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/federaciones.netcan.com/peers/ACW.federaciones.netcan.com/tls:/etc/hyperledger/fabric/tls
+        - ACW.federaciones.netcan.com:/var/hyperledger/production
+    ports:
+      - 10051:7051
+      - 10053:7053

@@ -1,0 +1,185 @@
+# Copyright IBM Corp. All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+version: '2'
+
+volumes:
+  CVAndalucia.colegiosveterinarios.netcan.com:
+  CVAragon.colegiosveterinarios.netcan.com:
+  CVAsturias.colegiosveterinarios.netcan.com:
+  CVIllesBalears.colegiosveterinarios.netcan.com:
+  CVCanarias.colegiosveterinarios.netcan.com:
+  CVCantabria.colegiosveterinarios.netcan.com:
+  CVCastillayLeon.colegiosveterinarios.netcan.com:
+  CVCastillalaMancha.colegiosveterinarios.netcan.com:
+  CVCataluna.colegiosveterinarios.netcan.com:
+  CVComunitatValenciana.colegiosveterinarios.netcan.com:
+  CVExtremadura.colegiosveterinarios.netcan.com:
+  CVGalicia.colegiosveterinarios.netcan.com:
+  CVMadrid.colegiosveterinarios.netcan.com:
+  CVMurcia.colegiosveterinarios.netcan.com:
+  CVNavarra.colegiosveterinarios.netcan.com:
+  CVPaisVasco.colegiosveterinarios.netcan.com:
+  CVLaRioja.colegiosveterinarios.netcan.com:
+
+networks:
+  default:
+    external:
+      name: netcan
+
+services:
+
+  ca.colegiosveterinarios:
+    image: hyperledger/fabric-ca:1.4.0
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca-colegiosveterinarios
+      - FABRIC_CA_SERVER_TLS_ENABLED=false
+      - FABRIC_CA_SERVER_PORT=7054
+    ports:
+      - "8054:7054"
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.colegiosveterinarios.netcan.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/1f0010447361e790c31d0e0c0fe5b6238804142c0ec886bc2e1c8cd5a18c3336_sk -b admin-cv:admin-cvpw -d --cfg.identities.allowremove'
+    volumes:
+      - ./crypto-config/peerOrganizations/colegiosveterinarios.netcan.com/ca/:/etc/hyperledger/fabric-ca-server-config
+      - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
+    container_name: ca_colegiosveterinarios
+    networks:
+      - default
+
+  CVAndalucia.colegiosveterinarios.netcan.com:
+    container_name: CVAndalucia.colegiosveterinarios.netcan.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: CVAndalucia.colegiosveterinarios.netcan.com
+    networks:
+      - default
+
+  CVAragon.colegiosveterinarios.netcan.com:
+    container_name: CVAragon.colegiosveterinarios.netcan.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: CVAragon.colegiosveterinarios.netcan.com
+    networks:
+      - default
+
+  CVAsturias.colegiosveterinarios.netcan.com:
+    container_name: CVAsturias.colegiosveterinarios.netcan.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: CVAsturias.colegiosveterinarios.netcan.com
+    networks:
+      - default
+
+  CVIllesBalears.colegiosveterinarios.netcan.com:
+    container_name: CVIllesBalears.colegiosveterinarios.netcan.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: CVIllesBalears.colegiosveterinarios.netcan.com
+    networks:
+      - default
+
+  CVCanarias.colegiosveterinarios.netcan.com:
+    container_name: CVCanarias.colegiosveterinarios.netcan.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: CVCanarias.colegiosveterinarios.netcan.com
+    networks:
+      - default
+
+  CVCantabria.colegiosveterinarios.netcan.com:
+    container_name: CVCantabria.colegiosveterinarios.netcan.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: CVCantabria.colegiosveterinarios.netcan.com
+    networks:
+      - default
+
+  CVCastillayLeon.colegiosveterinarios.netcan.com:
+    container_name: CVCastillayLeon.colegiosveterinarios.netcan.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: CVCastillayLeon.colegiosveterinarios.netcan.com
+    networks:
+      - default
+
+  CVCastillalaMancha.colegiosveterinarios.netcan.com:
+    container_name: CVCastillalaMancha.colegiosveterinarios.netcan.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: CVCastillalaMancha.colegiosveterinarios.netcan.com
+    networks:
+      - default
+
+  CVCataluna.colegiosveterinarios.netcan.com:
+    container_name: CVCataluna.colegiosveterinarios.netcan.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: CVCataluna.colegiosveterinarios.netcan.com
+    networks:
+      - default
+
+  CVComunitatValenciana.colegiosveterinarios.netcan.com:
+    container_name: CVComunitatValenciana.colegiosveterinarios.netcan.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: CVComunitatValenciana.colegiosveterinarios.netcan.com
+    networks:
+      - default
+
+  CVExtremadura.colegiosveterinarios.netcan.com:
+    container_name: CVExtremadura.colegiosveterinarios.netcan.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: CVExtremadura.colegiosveterinarios.netcan.com
+    networks:
+      - default
+
+  CVGalicia.colegiosveterinarios.netcan.com:
+    container_name: CVGalicia.colegiosveterinarios.netcan.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: CVGalicia.colegiosveterinarios.netcan.com
+    networks:
+      - default
+
+  CVMadrid.colegiosveterinarios.netcan.com:
+    container_name: CVMadrid.colegiosveterinarios.netcan.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: CVMadrid.colegiosveterinarios.netcan.com
+    networks:
+      - default
+
+  CVMurcia.colegiosveterinarios.netcan.com:
+    container_name: CVMurcia.colegiosveterinarios.netcan.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: CVMurcia.colegiosveterinarios.netcan.com
+    networks:
+      - default
+
+  CVNavarra.colegiosveterinarios.netcan.com:
+    container_name: CVNavarra.colegiosveterinarios.netcan.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: CVNavarra.colegiosveterinarios.netcan.com
+    networks:
+      - default
+
+  CVPaisVasco.colegiosveterinarios.netcan.com:
+    container_name: CVPaisVasco.colegiosveterinarios.netcan.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: CVPaisVasco.colegiosveterinarios.netcan.com
+    networks:
+      - default
+
+  CVLaRioja.colegiosveterinarios.netcan.com:
+    container_name: CVLaRioja.colegiosveterinarios.netcan.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: CVLaRioja.colegiosveterinarios.netcan.com
+    networks:
+      - default
