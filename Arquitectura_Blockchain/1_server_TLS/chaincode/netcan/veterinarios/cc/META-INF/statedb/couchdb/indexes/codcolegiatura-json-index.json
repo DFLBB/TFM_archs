@@ -1,0 +1,5 @@
+{
+   "index": {"fields": [ "docTYpe", "CODColegiatura", "FechaBaja" ]},
+   "name": "codcolegiatura-json-index",
+   "type": "json"
+}

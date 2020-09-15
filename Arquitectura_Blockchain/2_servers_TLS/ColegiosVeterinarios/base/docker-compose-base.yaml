@@ -1,0 +1,348 @@
+# Copyright IBM Corp. All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+version: '2'
+
+services:
+
+  CVMadrid.colegiosveterinarios.netcan.com:
+    container_name: CVMadrid.colegiosveterinario.netcan.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=CVMadrid.colegiosveterinarios.netcan.com
+      - CORE_PEER_ADDRESS=CVMadrid.colegiosveterinarios.netcan.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=CVMadrid.colegiosveterinarios.netcan.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=CVAndalucia.colegiosveterinarios.netcan.com:7051
+      - CORE_PEER_LOCALMSPID=ColegiosVeterinariosMSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/colegiosveterinarios.netcan.com/peers/CVMadrid.colegiosveterinarios.netcan.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/colegiosveterinarios.netcan.com/peers/CVMadrid.colegiosveterinarios.netcan.com/tls:/etc/hyperledger/fabric/tls
+        - CVMadrid.colegiosveterinarios.netcan.com:/var/hyperledger/production
+    ports:
+      - 11051:7051
+      - 11053:7053
+
+  CVAndalucia.colegiosveterinarios.netcan.com:
+    container_name: CVAndalucia.colegiosveterinarios.netcan.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=CVAndalucia.colegiosveterinarios.netcan.com
+      - CORE_PEER_ADDRESS=CVAndalucia.colegiosveterinarios.netcan.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=CVAndalucia.colegiosveterinarios.netcan.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=CVMadrid.colegiosveterinarios.netcan.com:7051
+      - CORE_PEER_LOCALMSPID=ColegiosVeterinariosMSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/colegiosveterinarios.netcan.com/peers/CVAndalucia.colegiosveterinarios.netcan.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/colegiosveterinarios.netcan.com/peers/CVAndalucia.colegiosveterinarios.netcan.com/tls:/etc/hyperledger/fabric/tls
+        - CVAndalucia.colegiosveterinarios.netcan.com:/var/hyperledger/production
+    ports:
+      - 12051:7051
+      - 12053:7053
+
+  CVAragon.colegiosveterinarios.netcan.com:
+    container_name: CVAragon.colegiosveterinarios.netcan.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=CVAragon.colegiosveterinarios.netcan.com
+      - CORE_PEER_ADDRESS=CVAragon.colegiosveterinarios.netcan.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=CVAragon.colegiosveterinarios.netcan.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=CVMadrid.colegiosveterinarios.netcan.com:7051
+      - CORE_PEER_LOCALMSPID=ColegiosVeterinariosMSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/colegiosveterinarios.netcan.com/peers/CVAragon.colegiosveterinarios.netcan.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/colegiosveterinarios.netcan.com/peers/CVAragon.colegiosveterinarios.netcan.com/tls:/etc/hyperledger/fabric/tls
+        - CVAragon.colegiosveterinarios.netcan.com:/var/hyperledger/production
+    ports:
+      - 13051:7051
+      - 13053:7053
+
+  CVAsturias.colegiosveterinarios.netcan.com:
+    container_name: CVAsturias.colegiosveterinarios.netcan.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=CVAsturias.colegiosveterinarios.netcan.com
+      - CORE_PEER_ADDRESS=CVAsturias.colegiosveterinarios.netcan.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=CVAsturias.colegiosveterinarios.netcan.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=CVMadrid.colegiosveterinarios.netcan.com:7051
+      - CORE_PEER_LOCALMSPID=ColegiosVeterinariosMSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/colegiosveterinarios.netcan.com/peers/CVAsturias.colegiosveterinarios.netcan.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/colegiosveterinarios.netcan.com/peers/CVAsturias.colegiosveterinarios.netcan.com/tls:/etc/hyperledger/fabric/tls
+        - CVAsturias.colegiosveterinarios.netcan.com:/var/hyperledger/production
+    ports:
+      - 14051:7051
+      - 14053:7053
+
+  CVIllesBalears.colegiosveterinarios.netcan.com:
+    container_name: CVIllesBalears.colegiosveterinarios.netcan.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=CVIllesBalears.colegiosveterinarios.netcan.com
+      - CORE_PEER_ADDRESS=CVIllesBalears.colegiosveterinarios.netcan.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=CVIllesBalears.colegiosveterinarios.netcan.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=CVMadrid.colegiosveterinarios.netcan.com:7051
+      - CORE_PEER_LOCALMSPID=ColegiosVeterinariosMSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/colegiosveterinarios.netcan.com/peers/CVIllesBalears.colegiosveterinarios.netcan.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/colegiosveterinarios.netcan.com/peers/CVIllesBalears.colegiosveterinarios.netcan.com/tls:/etc/hyperledger/fabric/tls
+        - CVIllesBalears.colegiosveterinarios.netcan.com:/var/hyperledger/production
+    ports:
+      - 15051:7051
+      - 15053:7053
+
+  CVCanarias.colegiosveterinarios.netcan.com:
+    container_name: CVCanarias.colegiosveterinarios.netcan.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=CVCanarias.colegiosveterinarios.netcan.com
+      - CORE_PEER_ADDRESS=CVCanarias.colegiosveterinarios.netcan.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=CVCanarias.colegiosveterinarios.netcan.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=CVMadrid.colegiosveterinarios.netcan.com:7051
+      - CORE_PEER_LOCALMSPID=ColegiosVeterinariosMSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/colegiosveterinarios.netcan.com/peers/CVCanarias.colegiosveterinarios.netcan.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/colegiosveterinarios.netcan.com/peers/CVCanarias.colegiosveterinarios.netcan.com/tls:/etc/hyperledger/fabric/tls
+        - CVCanarias.colegiosveterinarios.netcan.com:/var/hyperledger/production
+    ports:
+      - 16051:7051
+      - 16053:7053
+
+  CVCantabria.colegiosveterinarios.netcan.com:
+    container_name: CVCantabria.colegiosveterinarios.netcan.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=CVCantabria.colegiosveterinarios.netcan.com
+      - CORE_PEER_ADDRESS=CVCantabria.colegiosveterinarios.netcan.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=CVCantabria.colegiosveterinarios.netcan.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=CVMadrid.colegiosveterinarios.netcan.com:7051
+      - CORE_PEER_LOCALMSPID=ColegiosVeterinariosMSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/colegiosveterinarios.netcan.com/peers/CVCantabria.colegiosveterinarios.netcan.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/colegiosveterinarios.netcan.com/peers/CVCantabria.colegiosveterinarios.netcan.com/tls:/etc/hyperledger/fabric/tls
+        - CVCantabria.colegiosveterinarios.netcan.com:/var/hyperledger/production
+    ports:
+      - 17051:7051
+      - 17053:7053
+
+  CVCastillayLeon.colegiosveterinarios.netcan.com:
+    container_name: CVCastillayLeon.colegiosveterinarios.netcan.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=CVCastillayLeon.colegiosveterinarios.netcan.com
+      - CORE_PEER_ADDRESS=CVCastillayLeon.colegiosveterinarios.netcan.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=CVCastillayLeon.colegiosveterinarios.netcan.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=CVMadrid.colegiosveterinarios.netcan.com:7051
+      - CORE_PEER_LOCALMSPID=ColegiosVeterinariosMSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/colegiosveterinarios.netcan.com/peers/CVCastillayLeon.colegiosveterinarios.netcan.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/colegiosveterinarios.netcan.com/peers/CVCastillayLeon.colegiosveterinarios.netcan.com/tls:/etc/hyperledger/fabric/tls
+        - CVCastillayLeon.colegiosveterinarios.netcan.com:/var/hyperledger/production
+    ports:
+      - 18051:7051
+      - 18053:7053
+
+  CVCastillalaMancha.colegiosveterinarios.netcan.com:
+    container_name: CVCastillalaMancha.colegiosveterinarios.netcan.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=CVCastillalaMancha.colegiosveterinarios.netcan.com
+      - CORE_PEER_ADDRESS=CVCastillalaMancha.colegiosveterinarios.netcan.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=CVCastillalaMancha.colegiosveterinarios.netcan.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=CVMadrid.colegiosveterinarios.netcan.com:7051
+      - CORE_PEER_LOCALMSPID=ColegiosVeterinariosMSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/colegiosveterinarios.netcan.com/peers/CVCastillalaMancha.colegiosveterinarios.netcan.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/colegiosveterinarios.netcan.com/peers/CVCastillalaMancha.colegiosveterinarios.netcan.com/tls:/etc/hyperledger/fabric/tls
+        - CVCastillalaMancha.colegiosveterinarios.netcan.com:/var/hyperledger/production
+    ports:
+      - 19051:7051
+      - 19053:7053
+
+  CVCataluna.colegiosveterinarios.netcan.com:
+    container_name: CVCataluna.colegiosveterinarios.netcan.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=CVCataluna.colegiosveterinarios.netcan.com
+      - CORE_PEER_ADDRESS=CVCataluna.colegiosveterinarios.netcan.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=CVCataluna.colegiosveterinarios.netcan.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=CVMadrid.colegiosveterinarios.netcan.com:7051
+      - CORE_PEER_LOCALMSPID=ColegiosVeterinariosMSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/colegiosveterinarios.netcan.com/peers/CVCataluna.colegiosveterinarios.netcan.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/colegiosveterinarios.netcan.com/peers/CVCataluna.colegiosveterinarios.netcan.com/tls:/etc/hyperledger/fabric/tls
+        - CVCataluna.colegiosveterinarios.netcan.com:/var/hyperledger/production
+    ports:
+      - 20051:7051
+      - 20053:7053
+
+  CVComunitatValenciana.colegiosveterinarios.netcan.com:
+    container_name: CVComunitatValenciana.colegiosveterinarios.netcan.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=CVComunitatValenciana.colegiosveterinarios.netcan.com
+      - CORE_PEER_ADDRESS=CVComunitatValenciana.colegiosveterinarios.netcan.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=CVComunitatValenciana.colegiosveterinarios.netcan.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=CVMadrid.colegiosveterinarios.netcan.com:7051
+      - CORE_PEER_LOCALMSPID=ColegiosVeterinariosMSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/colegiosveterinarios.netcan.com/peers/CVComunitatValenciana.colegiosveterinarios.netcan.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/colegiosveterinarios.netcan.com/peers/CVComunitatValenciana.colegiosveterinarios.netcan.com/tls:/etc/hyperledger/fabric/tls
+        - CVComunitatValenciana.colegiosveterinarios.netcan.com:/var/hyperledger/production
+    ports:
+      - 21051:7051
+      - 21053:7053
+
+  CVExtremadura.colegiosveterinarios.netcan.com:
+    container_name: CVExtremadura.colegiosveterinarios.netcan.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=CVExtremadura.colegiosveterinarios.netcan.com
+      - CORE_PEER_ADDRESS=CVExtremadura.colegiosveterinarios.netcan.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=CVExtremadura.colegiosveterinarios.netcan.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=CVMadrid.colegiosveterinarios.netcan.com:7051
+      - CORE_PEER_LOCALMSPID=ColegiosVeterinariosMSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/colegiosveterinarios.netcan.com/peers/CVExtremadura.colegiosveterinarios.netcan.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/colegiosveterinarios.netcan.com/peers/CVExtremadura.colegiosveterinarios.netcan.com/tls:/etc/hyperledger/fabric/tls
+        - CVExtremadura.colegiosveterinarios.netcan.com:/var/hyperledger/production
+    ports:
+      - 22051:7051
+      - 22053:7053
+
+  CVGalicia.colegiosveterinarios.netcan.com:
+    container_name: CVGalicia.colegiosveterinarios.netcan.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=CVGalicia.colegiosveterinarios.netcan.com
+      - CORE_PEER_ADDRESS=CVGalicia.colegiosveterinarios.netcan.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=CVGalicia.colegiosveterinarios.netcan.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=CVMadrid.colegiosveterinarios.netcan.com:7051
+      - CORE_PEER_LOCALMSPID=ColegiosVeterinariosMSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/colegiosveterinarios.netcan.com/peers/CVGalicia.colegiosveterinarios.netcan.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/colegiosveterinarios.netcan.com/peers/CVGalicia.colegiosveterinarios.netcan.com/tls:/etc/hyperledger/fabric/tls
+        - CVGalicia.colegiosveterinarios.netcan.com:/var/hyperledger/production
+    ports:
+      - 23051:7051
+      - 23053:7053
+
+  CVMurcia.colegiosveterinarios.netcan.com:
+    container_name: CVMurcia.colegiosveterinarios.netcan.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=CVMurcia.colegiosveterinarios.netcan.com
+      - CORE_PEER_ADDRESS=CVMurcia.colegiosveterinarios.netcan.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=CVMurcia.colegiosveterinarios.netcan.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=CVMadrid.colegiosveterinarios.netcan.com:7051
+      - CORE_PEER_LOCALMSPID=ColegiosVeterinariosMSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/colegiosveterinarios.netcan.com/peers/CVMurcia.colegiosveterinarios.netcan.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/colegiosveterinarios.netcan.com/peers/CVMurcia.colegiosveterinarios.netcan.com/tls:/etc/hyperledger/fabric/tls
+        - CVMurcia.colegiosveterinarios.netcan.com:/var/hyperledger/production
+    ports:
+      - 24051:7051
+      - 24053:7053
+
+  CVNavarra.colegiosveterinarios.netcan.com:
+    container_name: CVNavarra.colegiosveterinarios.netcan.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=CVNavarra.colegiosveterinarios.netcan.com
+      - CORE_PEER_ADDRESS=CVNavarra.colegiosveterinarios.netcan.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=CVNavarra.colegiosveterinarios.netcan.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=CVMadrid.colegiosveterinarios.netcan.com:7051
+      - CORE_PEER_LOCALMSPID=ColegiosVeterinariosMSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/colegiosveterinarios.netcan.com/peers/CVNavarra.colegiosveterinarios.netcan.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/colegiosveterinarios.netcan.com/peers/CVNavarra.colegiosveterinarios.netcan.com/tls:/etc/hyperledger/fabric/tls
+        - CVNavarra.colegiosveterinarios.netcan.com:/var/hyperledger/production
+    ports:
+      - 25051:7051
+      - 25053:7053
+
+  CVPaisVasco.colegiosveterinarios.netcan.com:
+    container_name: CVPaisVasco.colegiosveterinarios.netcan.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=CVPaisVasco.colegiosveterinarios.netcan.com
+      - CORE_PEER_ADDRESS=CVPaisVasco.colegiosveterinarios.netcan.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=CVPaisVasco.colegiosveterinarios.netcan.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=CVMadrid.colegiosveterinarios.netcan.com:7051
+      - CORE_PEER_LOCALMSPID=ColegiosVeterinariosMSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/colegiosveterinarios.netcan.com/peers/CVPaisVasco.colegiosveterinarios.netcan.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/colegiosveterinarios.netcan.com/peers/CVPaisVasco.colegiosveterinarios.netcan.com/tls:/etc/hyperledger/fabric/tls
+        - CVPaisVasco.colegiosveterinarios.netcan.com:/var/hyperledger/production
+    ports:
+      - 26051:7051
+      - 26053:7053
+
+  CVLaRioja.colegiosveterinarios.netcan.com:
+    container_name: CVLaRioja.colegiosveterinarios.netcan.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=CVLaRioja.colegiosveterinarios.netcan.com
+      - CORE_PEER_ADDRESS=CVLaRioja.colegiosveterinarios.netcan.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=CVLaRioja.colegiosveterinarios.netcan.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=CVMadrid.colegiosveterinarios.netcan.com:7051
+      - CORE_PEER_LOCALMSPID=ColegiosVeterinariosMSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/colegiosveterinarios.netcan.com/peers/CVLaRioja.colegiosveterinarios.netcan.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/colegiosveterinarios.netcan.com/peers/CVLaRioja.colegiosveterinarios.netcan.com/tls:/etc/hyperledger/fabric/tls
+        - CVLaRioja.colegiosveterinarios.netcan.com:/var/hyperledger/production
+    ports:
+      - 27051:7051
+      - 27053:7053

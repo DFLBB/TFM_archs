@@ -1,0 +1,1 @@
+Es necesario extraer el material criptográfico del archivo crypto-config.tar.

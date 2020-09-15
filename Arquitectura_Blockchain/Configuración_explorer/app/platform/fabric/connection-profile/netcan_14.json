@@ -1,0 +1,60 @@
+{
+	"name": "netcan",
+	"version": "1.0.0",
+	"license": "Apache-2.0",
+	"client": {
+		"tlsEnable": false,
+		"adminUser": "admin",
+		"adminPassword": "adminpw",
+		"enableAuthentication": false,
+		"organization": "Federaciones",
+		"connection": {
+			"timeout": {
+				"peer": {
+					"endorser": "300"
+				},
+				"orderer": "300"
+			}
+		}
+	},
+	"channels": {
+		"netcanchannel": {
+			"peers": {
+				"fci.federaciones.netcan.com": {}
+			},
+			"connection": {
+				"timeout": {
+					"peer": {
+						"endorser": "6000",
+						"eventHub": "6000",
+						"eventReg": "6000"
+					}
+				}
+			}
+		}
+	},
+	"organizations": {
+		"Federaciones": {
+			"mspid": "FederacionesMSP",
+            "fullpath": true,
+			"adminPrivateKey": {
+				"path": "/home/hyperledger/work/src/fabric-samples/TFM2/crypto-config/peerOrganizations/federaciones.netcan.com/users/Admin@federaciones.netcan.com/msp/keystore/daf57f670b1e57ce971908aa3f4d8729f35e37672f407369697e9da092e76824_sk"
+			},
+			"signedCert": {
+				"path": "/home/hyperledger/work/src/fabric-samples/TFM2/crypto-config/peerOrganizations/federaciones.netcan.com/users/Admin@federaciones.netcan.com/msp/signcerts/Admin@federaciones.netcan.com-cert.pem"
+			}
+		}
+	},
+	"peers": {
+		"fci.federaciones.netcan.com": {
+			"url": "grpcs://localhost:7051",
+			"eventUrl": "grpcs://localhost:7053",
+			"grpcOptions": {
+				"ssl-target-name-override": "fci.federaciones.netcan.com"
+			},
+			"tlsCACerts": {
+				"path": "/home/hyperledger/work/src/fabric-samples/TFM2/crypto-config/peerOrganizations/federaciones.netcan.com/tlsca/tlsca.federaciones.netcan.com-cert.pem"
+			}
+		}
+	}
+}
